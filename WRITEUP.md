@@ -12,17 +12,17 @@ here; the words are yours.
 Give these to Claude before any analysis runs. One sentence each, plus one sentence on why you
 think so.
 
-**(1) A movie you know well, and what its three most-used tags will be:** XXXX
+**(1) A movie you know well, and what its three most-used tags will be:** Dark Knight: Epic, Action, Dark
 
-**(1) Why you think so:** XXXX
+**(1) Why you think so:** Because the movie is those things to me.
 
-**(2) Out of every 100 people who rated movies here, how many ever added a tag?** XXXX
+**(2) Out of every 100 people who rated movies here, how many ever added a tag?** 20
 
-**(2) Why you think so:** XXXX
+**(2) Why you think so:** I think many people would be content to just rate a movie.
 
-**(3) Can one person's tags take over a movie's tag list? Yes or no:** XXXX
+**(3) Can one person's tags take over a movie's tag list? Yes or no:** yes
 
-**(3) Why you think so:** XXXX
+**(3) Why you think so:** If the movie has no other tags, the only one to tag it would be 100% of the data
 
 ## Part 1. Whose data is this?
 
