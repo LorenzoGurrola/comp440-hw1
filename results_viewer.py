@@ -45,6 +45,7 @@ REPO = Path(__file__).resolve().parent
 GAP = 5     # how far two ranks must differ before we call the pair a disagreement
 TOP = 10    # how many tags to show in each ranked list
 SHOWN = 10  # how many disagreements to show per movie
+MIN_APPS = 1  # tags applied this many times or fewer are left out of the three tag tables
 
 DEFINITION = ("A disagreement is a movie-tag pair whose rank under score() and its rank in the "
               "judge's list differ by at least %d. Every list is ranked best first, with ties "
@@ -138,6 +139,9 @@ def build(scores_path, judge_path, data_dir, writeup_path):
         gaps = [(tag, score_rank[tag], judge_rank[tag]) for tag in judge_rank
                 if abs(score_rank[tag] - judge_rank[tag]) >= GAP]
         gaps.sort(key=lambda g: (-abs(g[1] - g[2]), g[0]))
+        # Tags applied only once to this movie are left out of the three tables below; the
+        # ranks shown are still the ones computed over every tag the judge rated.
+        gaps = [g for g in gaps if counts.get(g[0], 0) > MIN_APPS]
         out.append({
             "title": "%s — %s ratings" % (titles.get(movie_id, "movie %d" % movie_id),
                                           "{:,}".format(int(rated.get(movie_id, 0)))),
@@ -147,9 +151,16 @@ def build(scores_path, judge_path, data_dir, writeup_path):
             "judge": sorted(judge_rank, key=lambda t: judge_rank[t])[:TOP],
             "score": sorted(score_rank, key=lambda t: score_rank[t])[:TOP],
             "gaps": gaps[:SHOWN],
+            # Every tag the judge rated, by judge rank, beside its score() rank and the gap.
+            "both": [(tag, judge_rank[tag], score_rank[tag], abs(judge_rank[tag] - score_rank[tag]))
+                     for tag in sorted(judge_rank, key=lambda t: judge_rank[t])
+                     if counts.get(tag, 0) > MIN_APPS],
             "apps": sorted(((row.tag, row.userId, as_date(row.timestamp))
                             for row in applied.itertuples()),
                            key=lambda app: (app[0], app[2])),
+            # One row per tag with how many times it was applied, most first, ties alphabetical.
+            "tag_counts": sorted(((t, c) for t, c in counts.items() if c > MIN_APPS),
+                                 key=lambda tc: (-tc[1], tc[0])),
         })
     return out
 
@@ -178,8 +189,10 @@ def render(movies):
             "<h3>Your order</h3>", list_html(movie["mine"]),
             "<h3>The judge's order</h3>", list_html(movie["judge"]),
             "<h3>Your score()</h3>", list_html(movie["score"]),
+            "<h3>Judge rank against score() rank</h3>",
+            table_html(["Tag", "Judge rank", "score() rank", "Delta"], movie["both"]),
             "<h3>Tags on this movie</h3>",
-            table_html(["Tag", "User", "Date"], movie["apps"]),
+            table_html(["Tag", "Times applied"], movie["tag_counts"]),
             "<p>%d applications by %d people.</p>" % (len(movie["apps"]), movie["people"]),
             "<h3>Biggest disagreements, score() against the judge</h3>",
             table_html(["Tag", "score() rank", "Judge rank"], movie["gaps"]),
@@ -217,8 +230,10 @@ def render_text(movies):
                 "  Your order", numbered(movie["mine"]),
                 "  The judge's order", numbered(movie["judge"]),
                 "  Your score()", numbered(movie["score"]),
+                "  Judge rank against score() rank",
+                table_text(["Tag", "Judge rank", "score() rank", "Delta"], movie["both"]),
                 "  Tags on this movie",
-                table_text(["Tag", "User", "Date"], movie["apps"]),
+                table_text(["Tag", "Times applied"], movie["tag_counts"]),
                 "  %d applications by %d people." % (len(movie["apps"]), movie["people"]),
                 "  Biggest disagreements, score() against the judge",
                 table_text(["Tag", "score() rank", "Judge rank"], movie["gaps"]), ""]

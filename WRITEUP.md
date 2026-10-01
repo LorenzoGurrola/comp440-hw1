@@ -124,16 +124,16 @@ XXXX
 
 ### The viewer and the disagreements
 
-**One thing `movie_results.html` showed me that was useful, and one thing about it that got in my way:** XXXX
+**One thing `movie_results.html` showed me that was useful, and one thing about it that got in my way:** One thing is it showed me the top 10 tag outputs of everything we've done so far, which was helpful. What was not so helpful is that it printed out all the tags from the movies, which was hard to scroll through
 
 Then three improvements. For each: what the page would not let you see, what you had Claude
 change, and what the changed page shows that the first draft did not.
 
-**Improvement 1:** XXXX
+**Improvement 1:** The page was rough to scroll through, as each tag was listed as a row, so we changed it into each tag listed once with the count shown, organized by count descending
 
-**Improvement 2:** XXXX
+**Improvement 2:** The page was not good at displaying how the actual judge and score() rankings compared, so we changed that by adding a table and delta column
 
-**Improvement 3:** XXXX
+**Improvement 3:** The tables were quite long, and I noticed there were a lot of tags with only 1 application, so I removed these. The changed page shows much shorter tables, which lends itself to easier reading
 
 Then the three disagreements. A disagreement is a movie and a tag where your `score()` and the
 judge are furthest apart. For each: the movie and the tag, where your `score()` put it and where
