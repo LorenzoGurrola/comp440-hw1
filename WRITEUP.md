@@ -44,9 +44,9 @@ Code: `part1_data.py`.
 
 Code: `part2_tags.py`.
 
-**My movie, and why I picked it:** XXXX
+**My movie, and why I picked it:** The Dark Knight. This has been my favorite movie since I watched it a few years ago. I've seen it many times, and I think it touched on something significant in life that I want to explore more.
 
-**Its most misleading tag in the count-ordered list, and why it misleads:** XXXX
+**Its most misleading tag in the count-ordered list, and why it misleads:** I don't find any entry particularly misleading, but if I had to choose, I would pick "Morgan Freeman", because I guess he was less of a significant character for me than the rest
 
 **What I learned about how MovieLens collects ratings and tags, from rating and tagging my movie myself (about 100 words):** XXXX
 
@@ -55,12 +55,12 @@ Code: `part2_tags.py`.
 One sentence on the figure written before you saw it and one after. The two tables are where the
 details below come from. Say which script made them.
 
-**The figure, when the tags and the ratings arrived. What I expected:** XXXX
-**The figure, what it shows:** XXXX
+**The figure, when the tags and the ratings arrived. What I expected:** I think there will be a surge in the tag activity when the movie was first released in 2008, and slowly trend downwards and plateau with some activity still remaining. I think the ratings will follow a similar trend.
+**The figure, what it shows:** The figure shows the number of tag applications per month in blue, and the number of ratings per month in orange. The tag data is quite noisy, with frequent spikes. The ratings data has two obvious spikes, upon release in 2008, and in 2015
 
-**Two interesting details I learned up close that the counts did not show:** XXXX
+**Two interesting details I learned up close that the counts did not show:** The top tagger made 51 tag applications, just under 2% of the total tags on Dark Knight, which is quite a lot. Second, the average tagger rating was indeed higher than the average rating by others, at least for the top 10 tags on this movie.
 
-**Anything up close that contradicted something I had already written down. Which one, what the data showed, and what you now think. Or "nothing yet":** XXXX
+**Anything up close that contradicted something I had already written down. Which one, what the data showed, and what you now think. Or "nothing yet":** The slot named: "The figure, when the tags and the ratings arrived. What I expected". 2015 had another surge of ratings per month for the Dark Knight, which I did not predict. I did some research on a different Claude, and it couldn't find anything notable that happened with the Dark Knight movie in 2015. However, it did find that the MovieLens website got a redesign the year before, and likely had many new users onboarding and partaking in the ratings process.
 
 ### My definition
 
@@ -86,7 +86,7 @@ XXXX
 
 **My own order of the ten most-used tags, written before looking at any data: my movie from step 1, then my nine others from step 4:**
 
-XXXX
+58559: action, dark, superhero, thriller, psychology, Batman, Christian Bale, Heath Ledger, Christopher Nolan, Morgan Freeman
 
 **One criterion I considered for the judge and rejected, and why** (the one I used is in `judge/criterion.md`)**:** XXXX
 

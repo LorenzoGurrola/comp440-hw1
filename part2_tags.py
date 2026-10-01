@@ -83,15 +83,88 @@ and what it must write:
         disagreements mean, is your paragraph in `WRITEUP.md`.
 """
 
+from pathlib import Path
+
+import matplotlib
+import matplotlib.dates
+
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+import pandas as pd
+
 from load_data import load_all
+
+MY_MOVIE = 58559   # Dark Knight, The (2008), the student's step 1 movie
+FIGURES = Path(__file__).resolve().parent / "figures"
+
+
+def per_month(df):
+    months = pd.to_datetime(df["timestamp"], unit="s").dt.to_period("M")
+    return months.value_counts().sort_index()
+
+
+def when_figure(my_ratings, my_tags, title):
+    """figures/part2_when.png: tag applications and ratings per month, one panel each."""
+    r, t = per_month(my_ratings), per_month(my_tags)
+    span = pd.period_range(min(r.index.min(), t.index.min()), max(r.index.max(), t.index.max()), freq="M")
+    r, t = r.reindex(span, fill_value=0), t.reindex(span, fill_value=0)
+    x = span.to_timestamp()
+
+    # Two panels on a shared time axis, not one chart with two y-scales.
+    fig, (top, bottom) = plt.subplots(2, 1, sharex=True, figsize=(10, 6), facecolor="#fcfcfb")
+    for ax, series, color, label in ((top, t, "#2a78d6", "tag applications per month"),
+                                     (bottom, r, "#eb6834", "ratings per month")):
+        ax.set_facecolor("#fcfcfb")
+        ax.plot(x, series.to_numpy(), color=color, linewidth=1.5)
+        ax.set_ylabel(label)
+        ax.grid(axis="y", color="#e4e3dc", linewidth=0.8)
+        ax.spines[["top", "right"]].set_visible(False)
+    bottom.set_xlabel("year (one point per month)")
+    # One labelled tick at the start of every year.
+    bottom.xaxis.set_major_locator(matplotlib.dates.YearLocator())
+    bottom.xaxis.set_major_formatter(matplotlib.dates.DateFormatter("%Y"))
+    bottom.tick_params(axis="x", labelsize=8)
+    fig.suptitle(f"When did the tags and the ratings on {title} arrive?")
+    FIGURES.mkdir(exist_ok=True)
+    fig.savefig(FIGURES / "part2_when.png", dpi=150, bbox_inches="tight")
+    plt.close(fig)
+
+    # The numbers behind the figure, summed by year so they fit on screen.
+    by_year = pd.DataFrame({"tag applications": t, "ratings": r})
+    by_year = by_year.groupby(by_year.index.year).sum()
+    by_year.index.name = "year"
+    print("-- figures/part2_when.png, by year --")
+    print(by_year.to_string())
 
 
 def part2_tags(ratings, tags, movies, links):
-    print("part 2 unimplemented")  # delete this line when you start
-
     print("== (1) the obvious answer ==")
+    title = movies.set_index("movieId").loc[MY_MOVIE, "title"]
+    mine = tags[tags.movieId == MY_MOVIE]
+    print(f"{title}: {(ratings.movieId == MY_MOVIE).sum():,} ratings, {len(mine):,} tag applications")
+    # Raw tag strings, exactly as typed: no lowercasing or trimming.
+    with pd.option_context("display.max_rows", None):
+        print(mine["tag"].value_counts().rename("applications").to_string())
 
     print("== (2) up close ==")
+    when_figure(ratings[ratings.movieId == MY_MOVIE], mine, title)
+
+    print("-- who added each tag --")
+    who = mine.groupby("userId").size().rename("tag applications").sort_values(ascending=False)
+    who = who.to_frame().assign(share=lambda d: (d["tag applications"] / len(mine)).map("{:.1%}".format))
+    print(who.head(10).to_string())
+
+    print("-- how the taggers rated it --")
+    # Top ten raw tag strings by applications. A tagger who never rated the movie has no
+    # rating to count, so n_taggers can be smaller than the tag's application count.
+    my_ratings = ratings[ratings.movieId == MY_MOVIE].set_index("userId")["rating"]
+    rows = []
+    for tag in mine["tag"].value_counts().head(10).index:
+        applied = my_ratings.index.isin(mine.loc[mine["tag"] == tag, "userId"])
+        rows.append({"tag": tag,
+                     "n_taggers": int(applied.sum()), "taggers_mean": my_ratings[applied].mean(),
+                     "n_others": int((~applied).sum()), "others_mean": my_ratings[~applied].mean()})
+    print(pd.DataFrame(rows).set_index("tag").round(2).to_string())
 
     print("== (3) my definition ==")
 
