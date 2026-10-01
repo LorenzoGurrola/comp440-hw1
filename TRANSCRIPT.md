@@ -7,7 +7,7 @@ summarized as one-liners.
 <!-- transcript-session: c0c079a9-5207-4b86-b1e5-22622226226c | 2026-10-01T01:53:12.610Z -->
 ## Session `c0c079a9` — 2026-10-01 01:53:12
 
-*2 user turns. Tool outputs and reasoning omitted.*
+*12 user turns. Tool outputs and reasoning omitted.*
 
 **User:**
 Hey there
@@ -28,5 +28,130 @@ Next I'll fill in the Name and Date lines at the top of `WRITEUP.md` and commit 
 
 **User:**
 Yes
+
+**Claude:**
+- 🔧 `Bash` — Fill name and date, dump transcript, commit
+Setup is done. The top of `WRITEUP.md` now reads:
+
+```
+**Name:** Lorenzo Gurrola
+**Date:** 2026-09-30
+```
+
+I ran `dump_transcript.py` and committed as `Name and date`, and the working tree is clean.
+
+We're on Part 0 now. You write three predictions in your own words, with a reason for each, and they get committed before any analysis runs. I'll write each one into its slot exactly as you say it.
+
+First, prediction (1): name a movie you know well, and say what you think its three most-used tags will be.
+
+**User:**
+Can I have a hint on what type of tags users usually use
+
+**Claude:**
+I'd rather not give you that hint. Part 0 asks what you expect before you've seen anything, and a description of typical tags would be my prediction, not yours. Also, I haven't looked at the tag data, and I won't describe it from memory.
+
+Here's what I can say: a MovieLens tag is free text. Any user can type any short word or phrase onto any movie they like, and a "most-used tag" is just the string typed onto that movie most often.
+
+Being wrong here costs you nothing. The "Predictions revisited" slot later asks what you make of each miss, so a wrong guess gives you something to write about there.
+
+So go with your gut. Which movie, and what three tags do you think people typed on it most?
+
+**User:**
+Dark Knight: Epic, Action, Dark
+
+**Claude:**
+- 🔧 `Bash` — Write prediction 1 into its slot and show it
+I wrote your prediction into the first Part 0 slot. It reads:
+
+`**(1) A movie you know well, and what its three most-used tags will be:** Dark Knight: Epic, Action, Dark`
+
+Next is "(1) Why you think so". In one sentence, why do you expect those three tags?
+
+**User:**
+Because the movie is those things to me.
+
+**Claude:**
+- 🔧 `Bash` — Write reason 1 into its slot and show it
+I wrote your reason into the "(1) Why you think so" slot. It reads:
+
+`**(1) Why you think so:** Because the movie is those things to me.`
+
+Next is prediction (2). Out of every 100 people who rated movies in this dataset, how many do you think ever added a tag? Give me a number.
+
+**User:**
+Where is this dataset from?
+
+**Claude:**
+It's a compact subset of MovieLens 32M. MovieLens is a movie recommendation website run by the GroupLens research lab at the University of Minnesota. Users rate movies from 0.5 to 5 stars and get recommendations back. They can also type tags onto movies.
+
+The 32M release has about 32 million ratings. This repo's copy cuts that down to about 5 million. Part 1 asks you how you would make that cut, so I'll leave the details of the rule until then.
+
+I'm not opening `data/README.md` for you yet. It has the user and tag counts, and those would settle this prediction.
+
+So, out of every 100 people who rated movies here, how many do you think ever added a tag?
+
+**User:**
+Was adding a tag completely optional to the people who rated movies in this dataset?
+
+**Claude:**
+As far as I know, yes. Rating is the main thing you do on MovieLens. Tagging is a separate, optional feature, and I don't know of any point where users had to tag. I haven't checked that against anything in this repo, so treat it as background, not a verified fact.
+
+You'll see this for yourself in Part 2, which has you rate and tag a movie on MovieLens.
+
+What's your number out of 100?
+
+**User:**
+20
+
+**Claude:**
+- 🔧 `Bash` — Write prediction 2 into its slot and show it
+I wrote your number into the prediction (2) slot. It reads:
+
+`**(2) Out of every 100 people who rated movies here, how many ever added a tag?** 20`
+
+Next is "(2) Why you think so". In one sentence, why 20?
+
+**User:**
+I think many people would be content to just rate a movie.
+
+**Claude:**
+- 🔧 `Bash` — Write reason 2 into its slot and show it
+I wrote your reason into the "(2) Why you think so" slot. It reads:
+
+`**(2) Why you think so:** I think many people would be content to just rate a movie.`
+
+Last is prediction (3). Can one person's tags take over a movie's tag list? Answer yes or no.
+
+**User:**
+yes
+
+**Claude:**
+- 🔧 `Bash` — Write prediction 3 into its slot and show it
+I wrote your answer into the prediction (3) slot. It reads:
+
+`**(3) Can one person's tags take over a movie's tag list? Yes or no:** yes`
+
+Last is "(3) Why you think so". In one sentence, why do you think one person could take over a movie's tag list?
+
+**User:**
+If the movie has no other tags, the only one to tag it would be 100% of the data
+
+**Claude:**
+- 🔧 `Bash` — Write reason 3 and show all of Part 0
+All six Part 0 slots are filled. The last one, "(3) Why you think so", reads:
+
+`**(3) Why you think so:** If the movie has no other tags, the only one to tag it would be 100% of the data`
+
+These predictions have to be committed as `Part 0 predictions` before any analysis runs. Once they're committed they stay as written. If results contradict one later, you write about it in "Predictions revisited" and don't change the original.
+
+Shall I dump the transcript and commit Part 0 now?
+
+**User:**
+yes
+
+**Claude:**
+- 🔧 `Skill` — checkpoint
+- 🔧 `Bash` — Run the full check script
+- 🔧 `Read` — /Users/lorenzogurrola/Desktop/Files/COMP440/comp440-hw1/WRITEUP.md
 
 <!-- end-session: c0c079a9-5207-4b86-b1e5-22622226226c -->
