@@ -108,7 +108,7 @@ An order line looks like `296: nonlinear, hit men, dark comedy, ...`, the tags b
 
 **One criterion I considered for the judge and rejected, and why** (the one I used is in `judge/criterion.md`)**:** XXXX
 
-**Agreement. The number `agreement.py` gives for your `score()`, for popularity and for your own order, and which of the three came closest to the judge:** XXXX
+**Agreement. The number `agreement.py` gives for your `score()`, for popularity and for your own order, and which of the three came closest to the judge:** These numbers are the average of how many of the top 5 tags the judge rated a 4 or 5: 3.6 on my top 10 list, 2.71 for the score method, and 2.75 for the popularity. 3.6 is much higher, which is what I predicted, since I gave instructions to the judge that I used myself
 
 **How the judge skill is built: the files it is made of and what each one does (about 150 words):**
 

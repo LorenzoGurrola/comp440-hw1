@@ -83,6 +83,7 @@ and what it must write:
         disagreements mean, is your paragraph in `WRITEUP.md`.
 """
 
+import re
 from pathlib import Path
 
 import matplotlib
@@ -95,8 +96,15 @@ import pandas as pd
 from load_data import load_all
 
 MY_MOVIE = 58559   # Dark Knight, The (2008), the student's step 1 movie
-FIGURES = Path(__file__).resolve().parent / "figures"
+REPO = Path(__file__).resolve().parent
+FIGURES = REPO / "figures"
 C = 0.00025        # the student's constant, on the scale of the average share elsewhere
+
+
+def my_ten():
+    """The movieIds in the "My ten movies" slot of WRITEUP.md, read the way judge.py reads them."""
+    slot = (REPO / "WRITEUP.md").read_text(encoding="utf-8").split("**My ten movies")[-1]
+    return [int(n) for n in re.findall(r"^\s*(\d+)", slot.split("\n**")[0], re.M)]
 
 
 def clean(tags_df):
@@ -212,6 +220,16 @@ def part2_tags(ratings, tags, movies, links):
     print(merged.to_string())
 
     print("== (5) scores.csv ==")
+    judge_dir = REPO / "judge"
+    shipped = pd.read_csv(judge_dir / "movies.csv", keep_default_na=False)
+    asked = {(int(r.id), t) for r in shipped.itertuples() for t in r.tags.split("|") if t}
+    words = {w.strip() for w in (judge_dir / "vocabulary.txt").read_text().splitlines()}
+    on_mine = clean(tags[tags.movieId.isin(my_ten())])
+    asked |= {(int(m), t) for m, t in zip(on_mine.movieId, on_mine.tag) if t in words}
+    wanted = pd.DataFrame(sorted(asked), columns=["movieId", "tag"])
+    out = wanted.merge(scores, on=["movieId", "tag"], how="inner")
+    out.to_csv(REPO / "scores.csv", index=False)
+    print(f"asked for {len(wanted):,} movie-tag pairs, wrote {len(out):,} to scores.csv")
 
     print("== (6) the four rankings ==")
 
