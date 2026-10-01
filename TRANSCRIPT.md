@@ -1230,7 +1230,7 @@ Next session, I'll start from `git log` and pick up at Part 2 step 3, your `scor
 <!-- transcript-session: f392f5e2-6636-48b8-8bc8-1c6ffd5f3a52 | 2026-10-01T21:01:42.647Z -->
 ## Session `f392f5e2` — 2026-10-01 21:01:42
 
-*63 user turns. Tool outputs and reasoning omitted.*
+*77 user turns. Tool outputs and reasoning omitted.*
 
 **User:**
 what next
@@ -2299,6 +2299,189 @@ The slot's own label names `agreement.py`, so the source is covered.
 The judge run is done. That covers your criterion, `judge/ratings_movies.csv`, `scores.csv` and `agreement.csv`. Step 5 still has four prose slots: the rejected criterion and the three about the skill. Next I'd move to step 6, the viewer, while these results are fresh, and come back for those four afterwards.
 
 Do you want me to commit the judge run and push it first?
+
+**User:**
+yes
+
+**Claude:**
+- 🔧 `Bash` — Dump transcript, commit the judge run, and push
+- 🔧 `Bash` — Build the results viewer page and open it
+Committed and pushed as `8976b68 Part 2: step 5, my criterion, the judge run, scores and agreement`.
+
+**Step 6: the viewer.** I ran `results_viewer.py`. It wrote `movie_results.html`, which should now be open in your browser. It's a rough first draft on purpose, and working out what it gets right and wrong is your job.
+
+Spend a few minutes on it, ideally on a few of your ten movies. Then tell me: what's one thing it showed you that was useful, and one thing that got in your way?
+
+**User:**
+One thing is it showed me the top 10 tag outputs of everything we've done so far, which was helpful. What was not so helpful is that it printed out all the tags from the movies, which was hard to scroll through
+
+**Claude:**
+- 🔧 `Edit` — /Users/lorenzogurrola/Desktop/Files/COMP440/comp440-hw1/WRITEUP.md
+I wrote that into the viewer slot. It reads:
+
+> **One thing `movie_results.html` showed me that was useful, and one thing about it that got in my way:** One thing is it showed me the top 10 tag outputs of everything we've done so far, which was helpful. What was not so helpful is that it printed out all the tags from the movies, which was hard to scroll through
+
+That problem could be your first improvement. Each improvement needs three things: what the page didn't let you see, what you had me change, and what the changed page shows.
+
+What should the page show in place of the full tag list?
+
+**User:**
+Tag +  number of times it showed up, organized by that number descending
+
+**Claude:**
+- 🔧 `Bash` — Read results_viewer.py
+- 🔧 `Bash` — Replace the per-application table with tag counts and rebuild the page
+I changed one thing in `results_viewer.py`. The "Tags on this movie" table used to have one row per application, with columns Tag, User and Date. Now it has one row per tag, with columns **Tag** and **Times applied**, sorted by count from most to least. I broke ties alphabetically. The page is rebuilt and reopened. For The Dark Knight it now starts:
+
+```
+Tag                Times applied
+batman             176
+heath ledger       169
+dark               154
+superhero          150
+christian bale     133
+```
+
+These counts use the strip-and-lowercase rule that the viewer already applied. (The `BrokenPipeError` above came from cutting the text output short for this preview. It's not a bug in the page.)
+
+Have a look at the page. Then tell me, for the **Improvement 1** slot: what the page wouldn't let you see, what you had me change, and what the changed page shows.
+
+**User:**
+The page was rough to scroll through, as each tag was listed as a row, so we changed it into each tag listed once with the count shown, organized by count descending
+
+**Claude:**
+- 🔧 `Edit` — /Users/lorenzogurrola/Desktop/Files/COMP440/comp440-hw1/WRITEUP.md
+I wrote it into the Improvement 1 slot. It reads:
+
+> **Improvement 1:** The page was rough to scroll through, as each tag was listed as a row, so we changed it into each tag listed once with the count shown, organized by count descending
+
+Two more improvements to go. The handout wants them aimed at reading the disagreements, the places where your `score()` and the judge are furthest apart.
+
+Look at a few of your movies on the page with that in mind. What would you want to see that the page doesn't show you yet?
+
+**User:**
+Let's make a table, columns will be judges order, your score(), and then the delta between the ranking of the two
+
+**Claude:**
+One detail first, since the layout is your call. I'll read it as one row per tag that the judge rated, with columns **Tag | Judge rank | score() rank | Delta**. I'll add it next to the existing "Biggest disagreements" table rather than replacing that one.
+
+What order should the rows go in? For example by judge rank, by score() rank, or by delta.
+
+**User:**
+Well, by both  judge rank and score() rank, since these rankings should not change
+
+**Claude:**
+- 🔧 `AskUserQuestion` — {"questions": [{"question": "A single table can only be sorted one way, so which layout did you m...
+- 🔧 `Bash` — Add the judge-versus-score rank table and rebuild the page
+I added the table to `results_viewer.py`, rebuilt the page and reopened it. Each movie now has a section called **"Judge rank against score() rank"**, placed just above "Tags on this movie":
+
+- **Rows:** every tag the judge rated on that movie, sorted by judge rank.
+- **Columns:** Tag, Judge rank, score() rank, and Delta.
+- **Delta:** the absolute difference between the two ranks, as in the mockup you picked.
+
+Both ranks are the ones the page already used for its lists, computed by the same rule.
+
+Have a look. Then tell me, for the **Improvement 2** slot: what the page wouldn't let you see, what you had me change, and what the changed page shows.
+
+**User:**
+The page was not good at displaying how the actual judge and score() rankings compared, so we changed that by adding a table and delta column
+
+**Claude:**
+- 🔧 `Edit` — /Users/lorenzogurrola/Desktop/Files/COMP440/comp440-hw1/WRITEUP.md
+I wrote it into the Improvement 2 slot. It reads:
+
+> **Improvement 2:** The page was not good at displaying how the actual judge and score() rankings compared, so we changed that by adding a table and delta column
+
+A note for later: each improvement slot asks for three things. The third is what the changed page shows that the first draft didn't. That part is thin in both of yours so far. You can add to them whenever you like.
+
+Next is **Improvement 3**. Using the page as it is now, what about the disagreements is still hard to see?
+
+**User:**
+Let's also put a top 10 biggest disagreements table. Ask me any questions about this if you need
+
+**Claude:**
+The page already has a per-movie table called **"Biggest disagreements, score() against the judge"**. From `results_viewer.py`, lines 45–47 and 138–140: it lists up to 10 tags whose two ranks differ by at least 5 (`GAP = 5`), sorted from the largest gap down.
+
+So the question is what your new table adds. Should it be **one table across all the movies on the page**, the ten biggest disagreements anywhere with a movie column? Or should it change the existing per-movie table in some way?
+
+**User:**
+Ten biggest disagreements per movie, sorted by delta descending
+
+**Claude:**
+That's very close to what the existing table already does. It shows up to 10 tags per movie, sorted by gap from largest down. It differs from your description in two ways:
+
+- It only includes tags whose ranks differ by **at least 5**, so a movie can show fewer than 10 rows, or none.
+- It has columns **Tag | score() rank | Judge rank**, with no delta column.
+
+Do you want to change either of those? Or did you have something else in mind for this table?
+
+**User:**
+Actually this table is sorted by judge rank, not by gap. Double check
+
+**Claude:**
+- 🔧 `Bash` — Check how the disagreement table is sorted
+I checked. It's sorted by gap. Line 140 of `results_viewer.py`:
+
+```
+gaps.sort(key=lambda g: (-abs(g[1] - g[2]), g[0]))
+```
+
+That sorts by the absolute difference between the two ranks, largest first, with ties broken alphabetically. I also looked at the rendered Dark Knight table: going down the rows, the gap between its two rank columns gets smaller.
+
+You might be looking at the table I added in Improvement 2, **"Judge rank against score() rank"**. That one is sorted by judge rank. The disagreement table is further down, after "Tags on this movie".
+
+Which table were you looking at?
+
+**User:**
+I was looking at improvement 2. Miscommunication
+
+**Claude:**
+No problem. Those two tables sit close together on the page.
+
+So the existing "Biggest disagreements" table already shows up to ten tags per movie, sorted by gap from largest down. It just includes only gaps of at least 5, and it has no delta column.
+
+For Improvement 3, do you want to change that table, for example by dropping the cutoff or adding a delta column? Or is there something else about the disagreements the page still makes hard to see?
+
+**User:**
+Can we remove all tags that only have 1 application
+
+**Claude:**
+Yes. Which parts of the page should it apply to?
+
+- **"Tags on this movie" only.** That shortens the long count list.
+- **The two rank tables too.** That's "Judge rank against score() rank" and "Biggest disagreements". Tags applied only once on the movie would drop out of both.
+- **Everywhere,** including the four ranked lists at the top. The ranks themselves would then be recomputed without those tags.
+
+By "1 application" I'll take it to mean applied once to that movie, counted after the viewer's strip-and-lowercase rule.
+
+**User:**
+Tags on this movie, plus the two rank tables
+
+**Claude:**
+- 🔧 `Bash` — Drop once-applied tags from the three tables and rebuild
+- 🔧 `Bash` — Confirm no count-1 rows remain in the tag tables
+I made the change in `results_viewer.py`, rebuilt the page and reopened it. A new setting, `MIN_APPS = 1`, leaves out any tag applied only once to the movie. It applies to three tables:
+
+- "Tags on this movie": I checked, and no row with a count of 1 remains.
+- "Judge rank against score() rank".
+- "Biggest disagreements": still up to 10 rows, picked after the filter.
+
+Two things stay the same. Both rank columns are still the ranks computed over every tag the judge rated, so the numbers in them can skip values where a tag was removed. And the "N applications by N people" line still counts every application.
+
+For the **Improvement 3** slot: what the page wouldn't let you see, what you had me change, and what the changed page shows.
+
+**User:**
+The tables were quite long, and I noticed there were a lot of tags with only 1 application, so I removed these. The changed page shows much shorter tables, which lends itself to easier reading
+
+**Claude:**
+- 🔧 `Edit` — /Users/lorenzogurrola/Desktop/Files/COMP440/comp440-hw1/WRITEUP.md
+I wrote it into the Improvement 3 slot. It reads:
+
+> **Improvement 3:** The tables were quite long, and I noticed there were a lot of tags with only 1 application, so I removed these. The changed page shows much shorter tables, which lends itself to easier reading
+
+That's all three viewer improvements. Next come the three disagreements and the one high-level pattern, read off the page as it is now.
+
+Do you want me to commit the viewer changes and push them first?
 
 **User:**
 yes
