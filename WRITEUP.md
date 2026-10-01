@@ -28,17 +28,17 @@ think so.
 
 Code: `part1_data.py`.
 
-**My rule for cutting 32 million ratings to 5 million** (written before reading `data/make_compact.py`)**:** XXXX
+**My rule for cutting 32 million ratings to 5 million** (written before reading `data/make_compact.py`)**:** I would do a completely random selection
 
-**One rule I considered and rejected, and why:** XXXX
+**One rule I considered and rejected, and why:** By only selecting movies with a certain number of ratings or tags. However, I don't want to bias the sample
 
-**One interesting thing from `data/README.md`:** XXXX
+**One interesting thing from `data/README.md`:** Oh, what's interesting is that their rule is to keep the top 4000 movies with the most ratings, so their data ends up being a lot denser and I suppose, easier to work with
 
-**How the script's rule differs from mine, and what each keeps that the other drops:** XXXX
+**How the script's rule differs from mine, and what each keeps that the other drops:** The script keeps only the top x movies, and users that are eligible, while mine has no extra screening in this way. Their rule loses the randomness, my rule loses the density.
 
-**First check. Which of Claude's numbers, the different route you took, and whether it matched** (one good target: 6 tags are the literal text `NA`, which pandas drops unless told not to)**:** XXXX
+**First check. Which of Claude's numbers, the different route you took, and whether it matched** (one good target: 6 tags are the literal text `NA`, which pandas drops unless told not to)**:** I checked the least-rated movie's rating count (83), and I used numpy.loadtxt instead of pandas, and it matched
 
-**Second check. Which of Claude's numbers, the different route you took, and whether it matched:** XXXX
+**Second check. Which of Claude's numbers, the different route you took, and whether it matched:** I checked the share of all ML-32M ratings (15.625%), again using numpy, and it matched
 
 ## Part 2. What tags best describe a movie?
 
