@@ -64,15 +64,15 @@ details below come from. Say which script made them.
 
 ### My definition
 
-**My `score(movie, tag)`** (one or two sentences, precise enough that a classmate could code it)**:** XXXX
+**My `score(movie, tag)`** (one or two sentences, precise enough that a classmate could code it)**:** My score is (this tag popularity on this movie)/(average of this tag popularity on other movies + 0.00025). Popularity means the share of this movie's distinct taggers, and that movies without the tag do count as 0 in the average.
 
-**One definition I considered and rejected, and why:** XXXX
+**One definition I considered and rejected, and why:** I rejected the possibility of not including the constant in the denominator, because of dividing by 0 errors
 
-**Which tags I merged as the same tag, which I kept apart, and why:** XXXX
+**Which tags I merged as the same tag, which I kept apart, and why:** I merged tags that had case differences, and trimmed spaces from start and end, because the meaning is the same in both these situations. I kept spelling variants, plurals, and spaces inside a tag separate because I didn't want the rules to get too complicated
 
 **Why my definition, in about 150 words. Name one thing it gains and one thing it loses:**
 
-XXXX
+I chose this score because I wanted a "distinct" tag that described the movie well against other movies. I thought that many people would agree on this tag for this movie, and that it would be a somewhat rare tag across the whole dataset, so it really described this specific movie well. One thing it gains is that a good tag here is rare, like I said. One thing it loses is that it penalizes common tags such as "action" that could describe many movies well.
 
 ### The judge
 

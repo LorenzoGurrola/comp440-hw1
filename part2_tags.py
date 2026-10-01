@@ -96,6 +96,35 @@ from load_data import load_all
 
 MY_MOVIE = 58559   # Dark Knight, The (2008), the student's step 1 movie
 FIGURES = Path(__file__).resolve().parent / "figures"
+C = 0.00025        # the student's constant, on the scale of the average share elsewhere
+
+
+def clean(tags_df):
+    """The student's rule: case and spaces at either end do not make a different tag;
+    every other difference does."""
+    return tags_df.assign(tag=tags_df["tag"].str.strip().str.lower())
+
+
+def score_parts(tags_df):
+    """Every movie-tag pair with the two shares behind its score.
+
+    share_here: distinct people who used the tag on this movie, over distinct people who
+    tagged this movie at all. avg_elsewhere: the same share on every other movie, averaged
+    over every other movie with at least one tagger, 0 where the tag is absent."""
+    t = clean(tags_df)
+    taggers = t.groupby("movieId")["userId"].nunique()
+    n_movies = len(taggers)
+    pairs = t.groupby(["movieId", "tag"])["userId"].nunique().rename("people").reset_index()
+    pairs["share_here"] = pairs["people"] / pairs["movieId"].map(taggers)
+    total = pairs.groupby("tag")["share_here"].transform("sum")
+    pairs["avg_elsewhere"] = (total - pairs["share_here"]) / (n_movies - 1)
+    pairs["score"] = pairs["share_here"] / (pairs["avg_elsewhere"] + C)
+    return pairs
+
+
+def score(tags_df, ratings_df, movies_df):
+    """share here / (average share elsewhere + C). Ratings and movies are not used."""
+    return score_parts(tags_df)[["movieId", "tag", "score"]]
 
 
 def per_month(df):
@@ -167,8 +196,20 @@ def part2_tags(ratings, tags, movies, links):
     print(pd.DataFrame(rows).set_index("tag").round(2).to_string())
 
     print("== (3) my definition ==")
+    parts = score_parts(tags)
+    scores = parts[["movieId", "tag", "score"]]
+    print(f"{len(scores):,} rows over {scores.movieId.nunique():,} movies")
+    top = parts[parts.movieId == MY_MOVIE].sort_values("score", ascending=False).head(15)
+    print(top.drop(columns="movieId").set_index("tag").round(6).to_string())
 
     print("== (4) cleaning ==")
+    raw, cleaned = tags["tag"], clean(tags)["tag"]
+    print(f"raw tag strings in: {raw.nunique():,}, distinct tags out: {cleaned.nunique():,}")
+    merged = (pd.DataFrame({"raw": raw, "tag": cleaned}).groupby("tag")
+              .agg(applications=("raw", "size"), variants=("raw", "nunique")))
+    merged = merged[merged.variants > 1].sort_values("applications", ascending=False).head(5)
+    print("the five mergers that absorbed the most applications:")
+    print(merged.to_string())
 
     print("== (5) scores.csv ==")
 
