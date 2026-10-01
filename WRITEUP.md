@@ -48,7 +48,7 @@ Code: `part2_tags.py`.
 
 **Its most misleading tag in the count-ordered list, and why it misleads:** I don't find any entry particularly misleading, but if I had to choose, I would pick "Morgan Freeman", because I guess he was less of a significant character for me than the rest
 
-**What I learned about how MovieLens collects ratings and tags, from rating and tagging my movie myself (about 100 words):** XXXX
+**What I learned about how MovieLens collects ratings and tags, from rating and tagging my movie myself (about 100 words):** I noticed that before tagging a movie, you can see popular tags, which may bias you to agree with the consensus
 
 ### Up close
 
@@ -106,7 +106,7 @@ An order line looks like `296: nonlinear, hit men, dark comedy, ...`, the tags b
 136562: biographical drama, biography, Steve Jobs, technology, apple, computers, dialogue, Kate Winslet, Michael Fassbender, Aaron Sorkin
 4878: mindfuck, mental illness, dreamlike, surreal, twist ending, thought-provoking, psychology, time travel, original, atmospheric
 
-**One criterion I considered for the judge and rejected, and why** (the one I used is in `judge/criterion.md`)**:** XXXX
+**One criterion I considered for the judge and rejected, and why** (the one I used is in `judge/criterion.md`)**:** My initial idea was to give it a mathematical formula, similar to how we calculated score(). If the judge had used something comparable to score(), it would have made the succeeding section difficult because there would be no contrast in ranking.
 
 **Agreement. The number `agreement.py` gives for your `score()`, for popularity and for your own order, and which of the three came closest to the judge:** These numbers are the average of how many of the top 5 tags the judge rated a 4 or 5: 3.6 on my top 10 list, 2.71 for the score method, and 2.75 for the popularity. 3.6 is much higher, which is what I predicted, since I gave instructions to the judge that I used myself
 
@@ -139,17 +139,17 @@ Then the three disagreements. A disagreement is a movie and a tag where your `sc
 judge are furthest apart. For each: the movie and the tag, where your `score()` put it and where
 the judge put it, and what you think accounts for the gap.
 
-**Disagreement 1:** XXXX
+**Disagreement 1:** Dark Knight, Morgan Freeman. The score() ranked it 4 while the judge ranked it 42. I believe this is because I created the rule to penalize actor names
 
-**Disagreement 2:** XXXX
+**Disagreement 2:** There will be blood: dark. Judge ranked 3 while score ranked 18. I believe this is because I told the judge to rate overall themes and moods highly
 
-**Disagreement 3:** XXXX
+**Disagreement 3:** The bronx tale: coming of age. Judge rank 1 while score ranked 8. I believe this is because the judge is trying to find the overall theme of the movie.
 
-**One other high-level pattern in the results, and what you think is behind it:** XXXX
+**One other high-level pattern in the results, and what you think is behind it:** Once again I'm seeing the judge rate overall themes and emotions very highly, and penalizing names. I think this is because I explicitly told the judge to behave this way, and it's nice to see that preference reflected in the data
 
 ## Predictions revisited
 
-**Which of my three predictions were wrong, and what I make of each miss:** XXXX
+**Which of my three predictions were wrong, and what I make of each miss:** For prediction 1, I missed the obvious one (Batman). I was thinking more along the line of themes, not characters. I think for prediction 2, I was thinking about the large dataset, not the subset of data that was picked for its tagging and rating density. For prediction 3, I still agree with it, but it is obsolete given the way we picked the subset of data
 
 ## Part 3. What tags best describe a user?
 

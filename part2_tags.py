@@ -232,6 +232,24 @@ def part2_tags(ratings, tags, movies, links):
     print(f"asked for {len(wanted):,} movie-tag pairs, wrote {len(out):,} to scores.csv")
 
     print("== (6) the four rankings ==")
+    from agreement import my_order_lines
+    rated = pd.read_csv(REPO / "judge" / "ratings_movies.csv", keep_default_na=False)
+    mine_order, titles, cleaned_tags = my_order_lines(), movies.set_index("movieId")["title"], clean(tags)
+    for movie_id in my_ten():
+        print(f"-- {titles.get(movie_id, movie_id)} --")
+        lists = {
+            "the counts": cleaned_tags[cleaned_tags.movieId == movie_id]["tag"].value_counts().head(10).index,
+            "your own order": mine_order.get(movie_id, []),
+            # The judge's 1-5 ratings tie often; ties break alphabetically, as on the viewer.
+            "the judge's order": rated[rated.id == movie_id].sort_values(["rating", "tag"],
+                                 ascending=[False, True])["tag"].head(10),
+            # score() over the tags the judge rated, so it ranks the same set the judge did.
+            "your score()'s order": scores[(scores.movieId == movie_id)
+                                           & scores.tag.isin(rated[rated.id == movie_id].tag)]
+                                    .sort_values(["score", "tag"], ascending=[False, True])["tag"].head(10),
+        }
+        for heading, tag_list in lists.items():
+            print(f"{heading}: " + ", ".join(tag_list))
 
 
 if __name__ == "__main__":
