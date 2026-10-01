@@ -82,11 +82,29 @@ An order line looks like `296: nonlinear, hit men, dark comedy, ...`, the tags b
 
 **My ten movies:**
 
-XXXX
+58559, Dark Knight, The (2008)
+5810, 8 Mile (2002)
+56782, There Will Be Blood (2007)
+428, Bronx Tale, A (1993)
+105504, Captain Phillips (2013)
+1270, Back to the Future (1985)
+1907, Mulan (1998)
+2762, Sixth Sense, The (1999)
+136562, Steve Jobs (2015)
+4878, Donnie Darko (2001)
 
 **My own order of the ten most-used tags, written before looking at any data: my movie from step 1, then my nine others from step 4:**
 
 58559: action, dark, superhero, thriller, psychology, Batman, Christian Bale, Heath Ledger, Christopher Nolan, Morgan Freeman
+5810: inspiring, eminem, 1990s, music, Eminem, rap, true story, hip hop, based on a true story, Detroit
+56782: gritty, greed, morality, intense, religion, father-son relationship, Daniel Day-Lewis, cerebral, atmospheric, visually appealing
+428: mafia, coming of age, gangsters, 1960s, organized crime, new york, Robert De Niro, parent child relationship, peer presssure, father-son relationship
+105504: suspense, great acting, tense, true story, believable, based on a true story, hijacking, SEAL, Tom Hanks, tom hanks
+1270: adventure, 1980s, time travel, classic, future, sci-fi, comedy, alternate reality, quirky, Michael J. Fox
+1907: musical, great soundtrack, China, Disney, animation, feminism, strong female lead, Chinese culture, Eddie Murphy, cross dressing
+2762: mindfuck, twist ending, suspense, great ending, excellent script, psychological, unpredictable, psychology, ghosts, Bruce Willis
+136562: biographical drama, biography, Steve Jobs, technology, apple, computers, dialogue, Kate Winslet, Michael Fassbender, Aaron Sorkin
+4878: mindfuck, mental illness, dreamlike, surreal, twist ending, thought-provoking, psychology, time travel, original, atmospheric
 
 **One criterion I considered for the judge and rejected, and why** (the one I used is in `judge/criterion.md`)**:** XXXX
 
