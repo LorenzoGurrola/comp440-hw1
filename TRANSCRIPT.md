@@ -1230,7 +1230,7 @@ Next session, I'll start from `git log` and pick up at Part 2 step 3, your `scor
 <!-- transcript-session: f392f5e2-6636-48b8-8bc8-1c6ffd5f3a52 | 2026-10-01T21:01:42.647Z -->
 ## Session `f392f5e2` — 2026-10-01 21:01:42
 
-*53 user turns. Tool outputs and reasoning omitted.*
+*63 user turns. Tool outputs and reasoning omitted.*
 
 **User:**
 what next
@@ -2131,6 +2131,174 @@ I ran it through `agreement.py`'s own parser. It read all 10 movies, with 10 tag
 Step 4 is done. Next is step 5, the judge, which starts with your criterion paragraph.
 
 Do you want me to commit step 4 and push it?
+
+**User:**
+yes
+
+**Claude:**
+- 🔧 `Bash` — Dump transcript, commit step 4, and push
+- 🔧 `Bash` — Check for template updates and show the criterion file
+Committed and pushed as `a9b612c Part 2: step 4, my ten movies and my own order`. There are still no template updates upstream.
+
+**Step 5: the judge.** It starts with your criterion paragraph in `judge/criterion.md`. The file currently holds the paragraph the template shipped with, and it has to be replaced with your own words.
+
+The paragraph should say what makes a tag one that best describes a movie. Sonnet reads it and rates each tag from 1 to 5. Two limits from the handout:
+
+- The judge never sees a count, so a criterion like "the tag most people used" can't work.
+- It shouldn't be your `score()` written out in words, or the judge will just agree with you.
+
+You can dictate it to me, or write it into the file yourself and I'll read it back. What's your paragraph?
+
+**User:**
+I'm confused
+
+**Claude:**
+- 🔧 `Bash` — Read the judge system prompt and prompt-building code
+Here's the judge in plain terms.
+
+For each movie, Sonnet gets a message with three parts:
+
+```
+<your paragraph>
+
+Mulan (1998)
+musical
+animation
+Disney
+...
+```
+
+It replies with one line per tag, rating each one from 1 to 5 against your paragraph. That's all it sees: no counts, no ratings, no `score()`.
+
+So your paragraph is the rulebook a grader would use to decide whether a tag is a good description. Afterwards, `agreement.py` checks how many of your `score()`'s top five tags the judge rated 4 or 5. It does the same for popularity and for your own order.
+
+That's why the paragraph shouldn't restate your score. If it said "rate a tag high when it's rare elsewhere", the judge would just repeat your score back to you.
+
+Think about how you ranked the tags in step 4. When you put one tag above another, what made it better?
+
+**User:**
+You should rate a tag highly if it captures the overall theme that makes the movie good, or if the tag is an emotion that the movie instills in the audience. You should rate a tag lower if it is the name of a person, unless it is a biography about that person, since, although that person might be iconic, we are after bigger themes and plot points.
+
+**Claude:**
+- 🔧 `Write` — /Users/lorenzogurrola/Desktop/Files/COMP440/comp440-hw1/judge/criterion.md
+I wrote your paragraph into `judge/criterion.md`, replacing the shipped one. It reads:
+
+> You should rate a tag highly if it captures the overall theme that makes the movie good, or if the tag is an emotion that the movie instills in the audience. You should rate a tag lower if it is the name of a person, unless it is a biography about that person, since, although that person might be iconic, we are after bigger themes and plot points.
+
+Next is running `/judge`. It rates the tags on 100 movies plus your ten, takes a couple of minutes, and uses some of your Claude allowance.
+
+Before I run it: what do you expect `agreement.py` to show? Which of your three rankings will match the judge most closely: your `score()`, popularity, or your own order?
+
+**User:**
+My own order, since I tried to write in that paragraph my own criteria for how I'm ranking them subjectively
+
+**Claude:**
+- 🔧 `Skill` — judge
+- 🔧 `Bash` — Read the judge README
+- 🔧 `Bash` — Run the judge over the 100 movies plus the student's ten
+- 🔧 `Bash` — Show how judge.py reads the ten movies
+- 🔧 `Edit` — /Users/lorenzogurrola/Desktop/Files/COMP440/comp440-hw1/part2_tags.py
+- 🔧 `Edit` — /Users/lorenzogurrola/Desktop/Files/COMP440/comp440-hw1/part2_tags.py
+- 🔧 `Edit` — /Users/lorenzogurrola/Desktop/Files/COMP440/comp440-hw1/part2_tags.py
+- 🔧 `Edit` — /Users/lorenzogurrola/Desktop/Files/COMP440/comp440-hw1/part2_tags.py
+The judge run finished: 110 movies and 1,608 tag ratings, with none coming back short. I'm now writing `scores.csv` so that `agreement.py` has your scores to compare against.
+- 🔧 `Bash` — Run part2_tags.py and show the scores.csv section
+- 🔧 `Bash` — Score the three rankings against the judge
+`scores.csv` is written: 1,608 movie-tag pairs were requested and 1,608 were written, the same count the judge rated. Here is `agreement.py`:
+
+```
+Of a method's top five tags on a movie, how many the judge rated 4 or 5, averaged
+over every movie the judge rated.
+
+  score()          2.71 of 5, over 110 movies, 11 tags compared on the middle one
+  popularity       2.75 of 5, over 110 movies, 11 tags compared on the middle one
+  your own order   3.60 of 5, over 10 movies, 7 tags compared on the middle one
+  best possible    4.15 of 5, over 110 movies; no ranking can beat this
+
+wrote agreement.csv: one row per movie and method.
+```
+
+Before you write the "Agreement" slot, the part of each line after the number is worth a second look: "over N movies" and "N tags compared on the middle one".
+
+What do you make of these numbers?
+
+**User:**
+over N movies is just how many there are in that subset. I don't know what "compared on the middle one" means
+
+**Claude:**
+- 🔧 `Bash` — Read how agreement.py counts tags compared
+Here's what "compared on the middle one" means, from `agreement.py` (lines 59–67 and 92).
+
+For each movie, the script keeps only the tags that both the method ranked and the judge rated. The judge only rates tags from the 300-word `vocabulary.txt`. It then takes the method's top five from what's left. `tags_rated` is how many tags were left for that movie. "On the middle one" means the median of that count across the movies.
+
+- `score()` and popularity rank every tag on a movie. After the filter, the median movie has 11.
+- Your own order ranks only your ten tags per movie. Some of those aren't in the vocabulary, so the median movie has 7.
+
+You can see the per-movie counts in `agreement.csv`, in the `tags_rated` column. "Best possible" is computed over all 110 movies.
+
+What do you make of the three numbers now?
+
+**User:**
+That's interesting, 11 tags where compared on score and popularity, but only 7 on "your own order"
+
+**Claude:**
+Yes. The three numbers don't come from the same pool of tags, and they don't come from the same set of movies either: 110, 110, and 10.
+
+The "Agreement" slot asks for all three numbers and which one came closest to the judge.
+
+Given those differences, what do you make of comparing 3.60 with 2.71 and 2.75?
+
+**User:**
+3.6 is much higher, which is what I predicted, since I gave instructions to the judge that I used myself
+
+**Claude:**
+- 🔧 `Edit` — /Users/lorenzogurrola/Desktop/Files/COMP440/comp440-hw1/WRITEUP.md
+I wrote that into the "Agreement" slot. It reads:
+
+> **Agreement. The number `agreement.py` gives for your `score()`, for popularity and for your own order, and which of the three came closest to the judge:** 3.6 is much higher, which is what I predicted, since I gave instructions to the judge that I used myself
+
+Two things are still missing. The slot asks for all three numbers, and the writeup rule is that every number names the script it came from. Right now the slot has only 3.6, and it doesn't say which ranking that is or that `agreement.py` produced it.
+
+How do you want to state the three numbers?
+
+**User:**
+3.6 is the judge's ranking on my top 10 list, 2.71 is the judge's ranking of the score(), and 2.75 is of the popularity
+
+**Claude:**
+- 🔧 `Edit` — /Users/lorenzogurrola/Desktop/Files/COMP440/comp440-hw1/WRITEUP.md
+I put your sentence first in the slot. It reads:
+
+> 3.6 is the judge's ranking on my top 10 list, 2.71 is the judge's ranking of the score(), and 2.75 is of the popularity. 3.6 is much higher, which is what I predicted, since I gave instructions to the judge that I used myself
+
+Two things a grader would check against `agreement.py`:
+
+- None of these numbers is a ranking by the judge. Read the first line of `agreement.py`'s output again for what each one counts.
+- The slot still doesn't name `agreement.py` as the source.
+
+How do you want to put those two right?
+
+**User:**
+I meant they are the average of how many of the top 5 tags the judge rated a 4 or 5
+
+**Claude:**
+That definition is right, and it matches the first line of `agreement.py`'s output.
+
+To swap it in, I'd have to rewrite your first sentence around it, and that would make the sentence mine. Please say the whole first sentence again, the way you want it in the slot. It should cover each number, which ranking it belongs to, what it averages, and `agreement.py` as the source. I'll replace the current first sentence with exactly what you say.
+
+**User:**
+These numbers are the average of how many of the top 5 tags the judge rated a 4 or 5: 3.6 on my top 10 list, 2.71 for the score method, and 2.75 for the popularity.
+
+**Claude:**
+- 🔧 `Edit` — /Users/lorenzogurrola/Desktop/Files/COMP440/comp440-hw1/WRITEUP.md
+I replaced the first sentence. The slot now reads:
+
+> **Agreement. The number `agreement.py` gives for your `score()`, for popularity and for your own order, and which of the three came closest to the judge:** These numbers are the average of how many of the top 5 tags the judge rated a 4 or 5: 3.6 on my top 10 list, 2.71 for the score method, and 2.75 for the popularity. 3.6 is much higher, which is what I predicted, since I gave instructions to the judge that I used myself
+
+The slot's own label names `agreement.py`, so the source is covered.
+
+The judge run is done. That covers your criterion, `judge/ratings_movies.csv`, `scores.csv` and `agreement.csv`. Step 5 still has four prose slots: the rejected criterion and the three about the skill. Next I'd move to step 6, the viewer, while these results are fresh, and come back for those four afterwards.
+
+Do you want me to commit the judge run and push it first?
 
 **User:**
 yes
