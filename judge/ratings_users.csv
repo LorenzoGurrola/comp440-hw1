@@ -1,0 +1,500 @@
+id,tag,rating
+999999,acting,5
+999999,aliens,5
+999999,animation,5
+999999,atmospheric,5
+999999,based on a book,5
+999999,beautiful,5
+999999,bittersweet,5
+999999,boring,5
+999999,chick flick,5
+999999,classic,5
+999999,comedy,5
+999999,coming of age,5
+999999,creepy,5
+999999,death,5
+999999,depressing,5
+999999,disney,5
+999999,emotional,5
+999999,family,5
+999999,father-son relationship,5
+999999,friendship,5
+999999,fun,5
+999999,happy ending,5
+999999,heartwarming,5
+999999,horror,5
+999999,humorous,5
+999999,inspirational,5
+999999,interesting,5
+999999,johnny depp,5
+999999,leonardo dicaprio,5
+999999,loneliness,5
+999999,mental illness,5
+999999,murder,5
+999999,music,5
+999999,musical,5
+999999,quirky,5
+999999,quotable,5
+999999,reflective,5
+999999,relationships,5
+999999,religion,5
+999999,romance,5
+999999,sci-fi,5
+999999,sentimental,5
+999999,silly,5
+999999,soundtrack,5
+999999,stupid,5
+999999,suspenseful,5
+999999,tense,5
+999999,thriller,5
+999999,tom cruise,5
+999999,whimsical,5
+10202,anthony hopkins,5
+10202,atmospheric,5
+10202,based on a book,5
+10202,brad pitt,5
+10202,british,5
+10202,classic,5
+10202,clever,5
+10202,comedy,5
+10202,crime,5
+10202,dark,5
+10202,dark comedy,5
+10202,dark humor,5
+10202,disturbing,5
+10202,drama,5
+10202,excellent script,5
+10202,feel-good,5
+10202,friendship,5
+10202,good acting,5
+10202,great acting,5
+10202,great dialogue,5
+10202,great ending,5
+10202,great performances,5
+10202,heartwarming,5
+10202,hilarious,5
+10202,horror,5
+10202,imdb top 250,5
+10202,inspirational,5
+10202,investigation,5
+10202,mental illness,5
+10202,morgan freeman,5
+10202,multiple storylines,5
+10202,mystery,5
+10202,narrated,5
+10202,oscar (best picture),5
+10202,powerful ending,5
+10202,prison,5
+10202,psychological,5
+10202,psychological thriller,5
+10202,psychology,5
+10202,quirky,5
+10202,reflective,5
+10202,revenge,5
+10202,serial killer,5
+10202,stephen king,5
+10202,strong female lead,5
+10202,suspense,5
+10202,tense,5
+10202,thought-provoking,5
+10202,thriller,5
+10202,twist ending,5
+15875,alternate reality,5
+15875,atmospheric,5
+15875,based on a book,5
+15875,brad pitt,5
+15875,bruce willis,5
+15875,cerebral,5
+15875,christopher nolan,5
+15875,complicated,5
+15875,cult film,5
+15875,dark,5
+15875,dark comedy,5
+15875,disturbing,5
+15875,dreamlike,5
+15875,dystopia,5
+15875,edward norton,5
+15875,great ending,5
+15875,imdb top 250,5
+15875,memory,5
+15875,mental illness,5
+15875,mindfuck,5
+15875,mystery,5
+15875,narrated,5
+15875,nonlinear,5
+15875,original,5
+15875,philosophical,5
+15875,philosophy,5
+15875,plot twist,5
+15875,post-apocalyptic,5
+15875,powerful ending,5
+15875,psychological,5
+15875,psychological thriller,5
+15875,psychology,5
+15875,quirky,5
+15875,revenge,5
+15875,satirical,5
+15875,sci-fi,5
+15875,social commentary,5
+15875,storytelling,5
+15875,stylized,5
+15875,surreal,5
+15875,suspense,5
+15875,tense,5
+15875,thought-provoking,5
+15875,time loop,5
+15875,time travel,5
+15875,twist,5
+15875,twist ending,5
+15875,twists & turns,5
+15875,violence,5
+15875,violent,5
+158553,absurd,5
+158553,atmospheric,5
+158553,black and white,5
+158553,black comedy,5
+158553,boring,5
+158553,brutal,5
+158553,cerebral,5
+158553,cinematography,5
+158553,classic,5
+158553,corruption,5
+158553,dark,5
+158553,dark comedy,5
+158553,depressing,5
+158553,disturbing,5
+158553,drama,5
+158553,dreamlike,5
+158553,dystopia,5
+158553,edward norton,5
+158553,emotional,5
+158553,futuristic,5
+158553,great acting,5
+158553,great soundtrack,5
+158553,hallucinatory,5
+158553,imdb top 250,5
+158553,music,5
+158553,nazis,5
+158553,nudity (full frontal),5
+158553,nudity (topless),5
+158553,overrated,5
+158553,politics,5
+158553,powerful ending,5
+158553,prison,5
+158553,quirky,5
+158553,racism,5
+158553,rape,5
+158553,revenge,5
+158553,robert de niro,5
+158553,satire,5
+158553,satirical,5
+158553,sci-fi,5
+158553,social commentary,5
+158553,stylized,5
+158553,surreal,5
+158553,tense,5
+158553,thought-provoking,5
+158553,twist ending,5
+158553,violence,5
+158553,violent,5
+158553,visually appealing,5
+158553,weird,5
+116907,1980s,2
+116907,absurd,2
+116907,action,5
+116907,adventure,5
+116907,alternate reality,5
+116907,atmospheric,2
+116907,based on a book,2
+116907,classic,2
+116907,comedy,4
+116907,cult classic,2
+116907,cult film,3
+116907,ensemble cast,2
+116907,epic,4
+116907,fairy tale,3
+116907,fantasy,4
+116907,fantasy world,3
+116907,father-son relationship,4
+116907,feel-good,3
+116907,feminism,3
+116907,friendship,4
+116907,fun,4
+116907,funny,5
+116907,future,2
+116907,great soundtrack,2
+116907,happy ending,3
+116907,harrison ford,1
+116907,humorous,3
+116907,imdb top 250,2
+116907,love,4
+116907,magic,4
+116907,multiple storylines,2
+116907,music,3
+116907,mythology,3
+116907,plot twist,2
+116907,quirky,3
+116907,quotable,2
+116907,revenge,4
+116907,romance,3
+116907,sci-fi,4
+116907,space,3
+116907,space travel,3
+116907,star wars,1
+116907,strong female lead,3
+116907,teen,2
+116907,time travel,3
+116907,too long,1
+116907,visually appealing,2
+116907,war,3
+116907,whimsical,3
+116907,witty,3
+159685,al pacino,5
+159685,atmospheric,5
+159685,based on a book,5
+159685,biography,5
+159685,christian bale,5
+159685,christopher nolan,5
+159685,complicated,5
+159685,corruption,5
+159685,crime,5
+159685,dark,5
+159685,dialogue,5
+159685,drama,5
+159685,emotional,5
+159685,ensemble cast,5
+159685,great acting,5
+159685,great ending,5
+159685,heartwarming,5
+159685,imdb top 250,5
+159685,jack nicholson,5
+159685,leonardo dicaprio,5
+159685,long,5
+159685,mafia,5
+159685,magic,5
+159685,martin scorsese,5
+159685,matt damon,5
+159685,mindfuck,5
+159685,mystery,5
+159685,nonlinear,5
+159685,organized crime,5
+159685,philosophy,5
+159685,prison,5
+159685,psychological,5
+159685,psychology,5
+159685,racism,5
+159685,remake,5
+159685,revenge,5
+159685,robert de niro,5
+159685,scarlett johansson,5
+159685,sci-fi,5
+159685,social commentary,5
+159685,stephen king,5
+159685,surprise ending,5
+159685,suspense,5
+159685,tense,5
+159685,thriller,5
+159685,tom hanks,5
+159685,touching,5
+159685,twist ending,5
+159685,twists & turns,5
+159685,violence,5
+43386,atmospheric,5
+43386,based on a book,5
+43386,beautiful,5
+43386,bittersweet,5
+43386,black and white,5
+43386,black comedy,5
+43386,boring,5
+43386,brutal,5
+43386,classic,5
+43386,comic book,5
+43386,coming of age,5
+43386,controversial,5
+43386,crime,5
+43386,cult film,5
+43386,dark comedy,5
+43386,death,5
+43386,depressing,5
+43386,dreamlike,5
+43386,film noir,5
+43386,friendship,5
+43386,funny,5
+43386,great soundtrack,5
+43386,hallucinatory,5
+43386,high school,5
+43386,johnny depp,5
+43386,love,5
+43386,martin scorsese,5
+43386,melancholy,5
+43386,mindfuck,5
+43386,murder,5
+43386,new york city,5
+43386,prison,5
+43386,quirky,5
+43386,reflective,5
+43386,road trip,5
+43386,robert de niro,5
+43386,robert downey jr.,5
+43386,romantic comedy,5
+43386,satire,5
+43386,satirical,5
+43386,scarlett johansson,5
+43386,serial killer,5
+43386,social commentary,5
+43386,stylized,5
+43386,surreal,5
+43386,thriller,5
+43386,violence,5
+43386,violent,5
+43386,visually appealing,5
+43386,western,5
+153690,1980s,5
+153690,action,5
+153690,alternate reality,5
+153690,assassin,5
+153690,beautiful,5
+153690,cinematography,5
+153690,comic book,5
+153690,corruption,5
+153690,crime,5
+153690,dark,5
+153690,dark hero,5
+153690,disturbing,5
+153690,drama,5
+153690,dystopia,5
+153690,emotional,5
+153690,feminism,5
+153690,friendship,5
+153690,future,5
+153690,gore,5
+153690,great acting,5
+153690,great soundtrack,5
+153690,gritty,5
+153690,humorous,5
+153690,imdb top 250,5
+153690,loneliness,5
+153690,love story,5
+153690,marvel,5
+153690,music,5
+153690,natalie portman,5
+153690,nudity (topless),5
+153690,organized crime,5
+153690,quirky,5
+153690,revenge,5
+153690,sci-fi,5
+153690,slow paced,5
+153690,social commentary,5
+153690,soundtrack,5
+153690,storytelling,5
+153690,stylish,5
+153690,stylized,5
+153690,superhero,5
+153690,survival,5
+153690,tense,5
+153690,too long,5
+153690,touching,5
+153690,unique,5
+153690,violence,5
+153690,violent,5
+153690,visually appealing,5
+153690,western,5
+17035,action,3
+17035,atmospheric,5
+17035,based on a book,4
+17035,black and white,4
+17035,cerebral,3
+17035,cinematography,5
+17035,classic,4
+17035,coen brothers,2
+17035,corruption,3
+17035,crime,3
+17035,dark,4
+17035,dark comedy,4
+17035,drama,5
+17035,dreamlike,4
+17035,england,2
+17035,ensemble cast,2
+17035,fantasy,3
+17035,gothic,3
+17035,great acting,2
+17035,gritty,3
+17035,heartwarming,3
+17035,imdb top 250,5
+17035,jack nicholson,2
+17035,leonardo dicaprio,2
+17035,long,4
+17035,mafia,3
+17035,martin scorsese,2
+17035,matt damon,2
+17035,mindfuck,3
+17035,murder,5
+17035,music,3
+17035,musical,3
+17035,mystery,4
+17035,neo-noir,3
+17035,organized crime,3
+17035,original,4
+17035,oscar (best picture),2
+17035,psychological,3
+17035,psychological thriller,3
+17035,psychology,4
+17035,quirky,3
+17035,remake,2
+17035,surprise ending,3
+17035,surreal,3
+17035,suspense,4
+17035,tense,3
+17035,thriller,4
+17035,twist ending,3
+17035,violence,5
+17035,witty,3
+107315,acting,5
+107315,action,5
+107315,al pacino,5
+107315,animation,5
+107315,atmospheric,5
+107315,based on a book,5
+107315,black and white,5
+107315,boring,5
+107315,cinematography,5
+107315,classic,5
+107315,crime,5
+107315,cult classic,5
+107315,cult film,5
+107315,dark,5
+107315,disney,5
+107315,drama,5
+107315,dystopia,5
+107315,epic,5
+107315,family,5
+107315,future,5
+107315,great acting,5
+107315,great soundtrack,5
+107315,imdb top 250,5
+107315,japan,5
+107315,mafia,5
+107315,masterpiece,5
+107315,melancholy,5
+107315,murder,5
+107315,music,5
+107315,musical,5
+107315,new york city,5
+107315,nudity (topless),5
+107315,organized crime,5
+107315,oscar (best picture),5
+107315,overrated,5
+107315,paris,5
+107315,religion,5
+107315,revenge,5
+107315,robert de niro,5
+107315,sci-fi,5
+107315,science fiction,5
+107315,sentimental,5
+107315,social commentary,5
+107315,soundtrack,5
+107315,stylized,5
+107315,tense,5
+107315,too long,5
+107315,violence,5
+107315,war,5

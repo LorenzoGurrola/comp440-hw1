@@ -93,14 +93,27 @@ def add_me(ratings: pd.DataFrame, mine: pd.DataFrame) -> pd.DataFrame:
 SEED = 440                  # breaks ties at the 25% cut at random, the same way every run
 
 
-def top_tags(tags: pd.DataFrame) -> pd.DataFrame:
+IMPROVEMENT = 1             # 0: the first score; 1: popular tags penalized (improvement 1)
+POPULAR_SHARE, PENALTY = 0.01, 0.5   # improvement 1: the top 1% of tags by applications ×0.5
+
+
+def top_tags(tags: pd.DataFrame, version: int = IMPROVEMENT) -> pd.DataFrame:
     """Each movie's top 25% of tags, rounded up, by applications, with each one's dominance.
 
     Tags are cleaned by the Part 2 rule (case and spaces at either end do not make a
     different tag). Ties at the cut are broken at random under SEED. Dominance is a tag's
-    applications over the applications of all the chosen tags on that movie."""
+    applications over the applications of all the chosen tags on that movie.
+
+    Improvement 1 (version >= 1): before the cut, a tag's applications on a movie are
+    multiplied by PENALTY when the tag is in the top POPULAR_SHARE of all tags by total
+    applications across the dataset. The cut and dominance both use the penalized count."""
     from part2_tags import clean
-    counts = clean(tags).groupby(["movieId", "tag"]).size().rename("applications").reset_index()
+    cleaned = clean(tags)
+    counts = cleaned.groupby(["movieId", "tag"]).size().rename("applications").reset_index()
+    if version >= 1:
+        total = cleaned.groupby("tag").size().sort_values(ascending=False, kind="stable")
+        popular = set(total.head(int(np.ceil(len(total) * POPULAR_SHARE))).index)
+        counts["applications"] = counts["applications"] * np.where(counts["tag"].isin(popular), PENALTY, 1.0)
     counts = counts.sample(frac=1, random_state=SEED)                  # random order first,
     counts = counts.sort_values(["movieId", "applications"],            # then a stable sort,
                                 ascending=[True, False], kind="stable")  # so ties stay random
@@ -112,11 +125,12 @@ def top_tags(tags: pd.DataFrame) -> pd.DataFrame:
     return chosen[["movieId", "tag", "dominance"]]
 
 
-def score(ratings: pd.DataFrame, tags: pd.DataFrame, movies: pd.DataFrame):
+def score(ratings: pd.DataFrame, tags: pd.DataFrame, movies: pd.DataFrame,
+          version: int = IMPROVEMENT):
     """The student's score: for every movie a user rated, each of its top-25% tags gets the
     user's rating times its dominance on that movie; a tag's score is the sum over the
     user's movies. Vectorized: one merge of ratings onto each movie's chosen tags."""
-    pairs = ratings[["userId", "movieId", "rating"]].merge(top_tags(tags), on="movieId")
+    pairs = ratings[["userId", "movieId", "rating"]].merge(top_tags(tags, version), on="movieId")
     pairs["score"] = pairs["rating"] * pairs["dominance"]
     return (pairs.groupby(["userId", "tag"], as_index=False)["score"].sum()
             .sort_values(["userId", "score"], ascending=[True, False], ignore_index=True))
@@ -134,7 +148,7 @@ def pick_others(ratings: pd.DataFrame, tags: pd.DataFrame, mine: pd.DataFrame,
     from scipy import sparse
     vocab = [t.strip() for t in (REPO / "judge" / "vocabulary.txt").read_text().splitlines() if t.strip()]
     pool = sorted(set(vocab) - set(mine["tag"].head(10)))
-    chosen = top_tags(tags)
+    chosen = top_tags(tags, version=0)     # the nine were picked with the first score; keep them
     chosen = chosen[chosen["tag"].isin(pool)]
     others = ratings[ratings["userId"] != ME]
     users, u = np.unique(others["userId"], return_inverse=True)
@@ -155,6 +169,60 @@ def pick_others(ratings: pd.DataFrame, tags: pd.DataFrame, mine: pd.DataFrame,
         taken.add(users[i])
         picks.append({"userId": int(users[i]), "total": float(total[i]), "tags": drawn})
     return picks
+
+
+def top_five(ratings: pd.DataFrame, tags: pd.DataFrame, n: int = 5) -> pd.DataFrame:
+    """Each user's n highest-rated movies. Ties: more tags the user applied to the movie
+    first, then random under SEED. The same rule as the viewer's top 3."""
+    own = tags.groupby(["userId", "movieId"]).size().rename("my_tags")
+    r = ratings[["userId", "movieId", "rating"]].join(own, on=["userId", "movieId"])
+    r["my_tags"] = r["my_tags"].fillna(0).astype(int)
+    r["draw"] = np.random.default_rng(SEED).random(len(r))
+    r = r.sort_values(["userId", "rating", "my_tags", "draw"], ascending=[True, False, False, True])
+    return r.groupby("userId").head(n)
+
+
+def users_csv(ratings: pd.DataFrame, tags: pd.DataFrame, movies: pd.DataFrame, ids: list[int],
+              n_tags: int = 50) -> pd.DataFrame:
+    """judge/users.csv, by the student's rules.
+
+    description: the person's top five movies, one per line, each as its title (with year)
+    then the vocabulary tags other people applied to it, alphabetical, no counts.
+    tags: the n_tags vocabulary tags with the most applications by other people summed over
+    those five movies; ties at the cut broken at random under SEED; listed alphabetically."""
+    from part2_tags import clean
+    vocab = {t.strip() for t in (REPO / "judge" / "vocabulary.txt").read_text().splitlines() if t.strip()}
+    ct = clean(tags)
+    ct = ct[ct["tag"].isin(vocab)]
+    titles = movies.set_index("movieId")["title"]
+    five = top_five(ratings[ratings["userId"].isin(ids)], tags)
+    rng, rows = np.random.default_rng(SEED), []
+    for u in ids:
+        mv = list(five.loc[five["userId"] == u, "movieId"])
+        theirs = ct[ct["movieId"].isin(mv) & (ct["userId"] != u)]
+        lines = [f"{titles[m]}: " + ", ".join(sorted(theirs.loc[theirs["movieId"] == m, "tag"].unique()))
+                 for m in mv]
+        counts = theirs.groupby("tag").size().rename("n").reset_index()
+        counts["draw"] = rng.random(len(counts))
+        pick = counts.sort_values(["n", "draw"], ascending=[False, True]).head(n_tags)["tag"]
+        rows.append({"id": u, "description": "\n".join(lines), "tags": "|".join(sorted(pick))})
+    return pd.DataFrame(rows, columns=["id", "description", "tags"])
+
+
+def side_by_side(scored: pd.DataFrame) -> pd.DataFrame:
+    """My score next to the judge's rating on the pairs the judge rated.
+
+    Per person, my score is min-max scaled to 1..5 over that person's judged tags and
+    rounded to 2 decimals. A pair with no score, or with no judge rating, is left out.
+    delta = scaled score minus judge rating, so a positive delta means my score ranks the
+    tag higher than the judge does."""
+    judge = pd.read_csv(REPO / "judge" / "ratings_users.csv").rename(columns={"id": "userId", "rating": "judge"})
+    both = judge.merge(scored, on=["userId", "tag"], how="inner")
+    lo = both.groupby("userId")["score"].transform("min")
+    hi = both.groupby("userId")["score"].transform("max")
+    both["scaled"] = (1 + 4 * (both["score"] - lo) / (hi - lo)).round(2)
+    both["delta"] = (both["scaled"] - both["judge"]).round(2)
+    return both[["userId", "tag", "score", "scaled", "judge", "delta"]]
 
 
 def part3_users(ratings, tags, movies, links):
@@ -181,9 +249,34 @@ def part3_users(ratings, tags, movies, links):
     print(f"{len(scored):,} user-tag rows over {scored['userId'].nunique()} user(s)")
 
     print("== (3) the nine others ==")
-    picks = pick_others(ratings, tags, scored[scored["userId"] == ME])
+    first = score(ratings[ratings["userId"] == ME], tags, movies, version=0)
+    picks = pick_others(ratings, tags, first)
     for p in picks:
         print(f"user {p['userId']}: total {p['total']:.3f} on {', '.join(p['tags'])}")
+
+    print("== (4) judge/users.csv ==")
+    ids = [ME] + [p["userId"] for p in picks]
+    users = users_csv(ratings, tags, movies, ids)
+    users.to_csv(REPO / "judge" / "users.csv", index=False)
+    n = users["tags"].str.count(r"\|") + 1
+    print(f"wrote judge/users.csv: {len(users)} people, {int(n.sum())} tag ratings to ask for "
+          f"({int(n.min())} to {int(n.max())} per person)")
+
+    print("== (5) my score beside the judge ==")
+    if not (REPO / "judge" / "ratings_users.csv").exists():
+        print("judge/ratings_users.csv is not here yet: run the judge on judge/users.csv first.")
+        return
+    scored_ids = score(ratings[ratings["userId"].isin(ids)], tags, movies)
+    sbs = side_by_side(scored_ids)
+    sbs.to_csv(REPO / "user_agreement.csv", index=False)
+    before = side_by_side(score(ratings[ratings["userId"].isin(ids)], tags, movies, version=0))
+    before.to_csv(REPO / "user_agreement_v0.csv", index=False)
+    print(f"wrote user_agreement.csv: {len(sbs)} pairs over {sbs['userId'].nunique()} people "
+          f"(columns: {', '.join(sbs.columns)})")
+    for u, block in sbs.groupby("userId", sort=False):
+        print(f"\n-- {'me' if u == ME else f'user {u}'}: {len(block)} pairs, sorted by delta --")
+        print(block.sort_values("delta", ascending=False)[["tag", "scaled", "judge", "delta"]]
+              .to_string(index=False))
 
 
 if __name__ == "__main__":

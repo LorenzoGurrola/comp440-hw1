@@ -40,8 +40,8 @@ def build():
     ratings, tags, movies, _ = load_all()
     mine, _ = read_my_ratings()
     ratings = add_me(ratings, mine)
-    my_scores = score(ratings[ratings["userId"] == ME], tags, movies)
-    others = pick_others(ratings, tags, my_scores)
+    first = score(ratings[ratings["userId"] == ME], tags, movies, version=0)
+    others = pick_others(ratings, tags, first)      # the same nine, picked with the first score
     ids = [ME] + [p["userId"] for p in others]
     sub = ratings[ratings["userId"].isin(ids)]
     scored = score(sub, tags, movies)
