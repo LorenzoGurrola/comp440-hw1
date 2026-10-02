@@ -160,7 +160,26 @@ and no numbering, the movieId first and the rating last, as in `296, Pulp Fictio
 
 **My 20 ratings:**
 
-XXXX
+34048, War of the Worlds (2005), 4
+337, What's Eating Gilbert Grape (1993), 5
+5389, Spirit: Stallion of the Cimarron (2002), 5
+364, Lion King, The (1994), 5
+1393, Jerry Maguire (1996), 5
+2288, Thing, The (1982), 4.5
+2712, Eyes Wide Shut (1999), 3
+4388, Scary Movie 2 (2001), 1.5
+79592, Other Guys, The (2010), 3.5
+5419, Scooby-Doo (2002), 4.5
+121231, It Follows (2014), 3.5
+36529, Lord of War (2005), 4
+111, Taxi Driver (1976), 4.5
+59369, Taken (2008), 4.5
+457, Fugitive, The (1993), 3
+5502, Signs (2002), 5
+46578, Little Miss Sunshine (2006), 4
+60074, Hancock (2008), 3.5
+4878, Donnie Darko (2001), 4.5
+106920, Her (2013), 4.5
 
 **My `score(user, tag)`, in a sentence, and why I started there (about 100 words):**
 
