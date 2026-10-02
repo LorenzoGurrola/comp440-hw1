@@ -221,17 +221,25 @@ Give these to Claude the way you gave it the rest. Graded on the catch and the c
 making Claude look good or bad.
 
 **A moment where Claude was wrong or overconfident, how you caught it, and where it
-happened. Name the part and the step, so the moment can be found:** XXXX
+happened. Name the part and the step, so the moment can be found:** I remember a few moments where I thought you were wrong, but it turns out we had a miscommunication. I don't think you were wrong at all in this HW
 
-**One call where you overrode Claude, and why:** XXXX
+Here was one such miscommunication, in Part 2, step 6
 
-**What you would hand to Claude sooner next time:** XXXX
+> **User:** Actually this table is sorted by judge rank, not by gap. Double check
+>
+> **Claude:** I checked. It's sorted by gap. Line 140 of `results_viewer.py` … You might be looking at the table I added in Improvement 2, **"Judge rank against score() rank"**. That one is sorted by judge rank. … Which table were you looking at?
+>
+> **User:** I was looking at improvement 2. Miscommunication
 
-**Did Claude name the misleading tag in Part 2 step 1 before you did? What happened:** XXXX
+**One call where you overrode Claude, and why:** Claude suggested recalculating the users.csv and rerunning the judge, but I decided that would be too much and suggested an alternative.
+
+**What you would hand to Claude sooner next time:** I would ask claude to repeat back to me the formula for calculating user score and dominance, because I think it misinterpreted my steps there.
+
+**Did Claude name the misleading tag in Part 2 step 1 before you did? What happened:** No, I decided the misleading tag based on my own opinion. I don't remember claude saying anything at that point about the Morgan Freeman tag.
 
 **The figure. Would asking Claude "what does this show?" have produced your sentence, and what
-would have been missing from it:** XXXX
+would have been missing from it:** I think claude could have created that sentence, but would have refused to based on the way it has been set up
 
-**Hours spent:** XXXX
+**Hours spent:** Around 8 hours
 
-**Anyone who helped you, or "no one":** XXXX
+**Anyone who helped you, or "no one":** I did some quick research with a different Claude agent in for the figure in Part 2. Apart from that, no one
