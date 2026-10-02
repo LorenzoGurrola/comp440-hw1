@@ -183,11 +183,13 @@ and no numbering, the movieId first and the rating last, as in `296, Pulp Fictio
 
 **My `score(user, tag)`, in a sentence, and why I started there (about 100 words):**
 
-XXXX
+On each movie I rate, take the top 25% of tags (rounded up to the nearest whole number), ("top" being defined as the tags with the most applications on that movie), and calculate each of those tags "dominance", which is defined as its share of the chosen tags, going off of application numbers. Each remaining tag on this movie should now have a number between 0 and 1. Multiply this number by my rating, and you get, for each tag, a value of how much I like that tag. If these are new tags that have not been calculated yet, those numbers remain. If I have already rated a movie that shares the tags, add these new values to the old values to get the new score. I noticed that a lot of lower-popularity tags on movies were nonsensical, so if we're curating recommendations, I only wanted the highest quality tags to influence that.
 
 **What my score says about me: my top ten tags, and whether they describe my taste (about 100 words):**
 
-XXXX
+My top ten, from `part3_users.py`: animation, aliens, sci-fi, tom cruise, coming of age, soundtrack, mental illness, action, atmospheric, bittersweet.
+
+I'm happy to say they roughly do describe my tastes! I think if I were to sit down and curate this top 10 tag list, though, I could come up with a better one. I'm not particularly partial to tom cruise as an actor
 
 **What my user viewer shows and why I chose that (about 100 words):**
 

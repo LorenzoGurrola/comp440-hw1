@@ -89,18 +89,39 @@ def add_me(ratings: pd.DataFrame, mine: pd.DataFrame) -> pd.DataFrame:
 
 # ------------------------------------------------------------------- yours to write ---
 
-def score(ratings: pd.DataFrame, tags: pd.DataFrame, movies: pd.DataFrame):
-    """What tags best describe a user. This one is yours; the handout's Part 3, step 2.
+SEED = 440                  # breaks ties at the 25% cut at random, the same way every run
 
-    Return one row per user-tag pair: userId, tag, score, higher meaning the tag describes
-    the user better. Start simply, test it on your own ratings, and improve it twice with
-    what your viewer and your judge show you."""
-    print("score(user, tag) is yours to write")
+
+def top_tags(tags: pd.DataFrame) -> pd.DataFrame:
+    """Each movie's top 25% of tags, rounded up, by applications, with each one's dominance.
+
+    Tags are cleaned by the Part 2 rule (case and spaces at either end do not make a
+    different tag). Ties at the cut are broken at random under SEED. Dominance is a tag's
+    applications over the applications of all the chosen tags on that movie."""
+    from part2_tags import clean
+    counts = clean(tags).groupby(["movieId", "tag"]).size().rename("applications").reset_index()
+    counts = counts.sample(frac=1, random_state=SEED)                  # random order first,
+    counts = counts.sort_values(["movieId", "applications"],            # then a stable sort,
+                                ascending=[True, False], kind="stable")  # so ties stay random
+    rank = counts.groupby("movieId").cumcount() + 1
+    keep = -(-counts.groupby("movieId")["tag"].transform("size") // 4)  # ceil(n / 4)
+    chosen = counts[rank <= keep].copy()
+    chosen["dominance"] = (chosen["applications"]
+                           / chosen.groupby("movieId")["applications"].transform("sum"))
+    return chosen[["movieId", "tag", "dominance"]]
+
+
+def score(ratings: pd.DataFrame, tags: pd.DataFrame, movies: pd.DataFrame):
+    """The student's score: for every movie a user rated, each of its top-25% tags gets the
+    user's rating times its dominance on that movie; a tag's score is the sum over the
+    user's movies. Vectorized: one merge of ratings onto each movie's chosen tags."""
+    pairs = ratings[["userId", "movieId", "rating"]].merge(top_tags(tags), on="movieId")
+    pairs["score"] = pairs["rating"] * pairs["dominance"]
+    return (pairs.groupby(["userId", "tag"], as_index=False)["score"].sum()
+            .sort_values(["userId", "score"], ascending=[True, False], ignore_index=True))
 
 
 def part3_users(ratings, tags, movies, links):
-    print("part 3 unimplemented")  # delete this line when you start
-
     print("== (1) my ratings ==")
     mine, skipped = read_my_ratings()
     print(f'{len(mine)} rating(s) read from the "{SLOT}" slot in WRITEUP.md.')
@@ -118,7 +139,10 @@ def part3_users(ratings, tags, movies, links):
         print(f"{len(ratings):,} ratings, none of them yours yet.")
 
     print("== (2) score(user, tag) ==")
-    score(ratings, tags, movies)
+    users = [ME]                # the users scored so far: you alone, until you name others
+    scored = score(ratings[ratings["userId"].isin(users)], tags, movies)
+    print(scored[scored["userId"] == ME].head(10)[["tag", "score"]].to_string(index=False))
+    print(f"{len(scored):,} user-tag rows over {scored['userId'].nunique()} user(s)")
 
 
 if __name__ == "__main__":
