@@ -193,7 +193,7 @@ I'm happy to say they roughly do describe my tastes! I think if I were to sit do
 
 **What my user viewer shows and why I chose that (about 100 words):**
 
-XXXX
+It shows each user's top 10 tags, along with the score. I also showed their top 3 movies in an attempt to be able to quickly see if the tags match the movies
 
 **What I put in the description column for a person, and why (about 150 words):**
 

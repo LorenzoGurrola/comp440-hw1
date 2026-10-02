@@ -34,6 +34,7 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 
 from load_data import load_all
@@ -121,6 +122,41 @@ def score(ratings: pd.DataFrame, tags: pd.DataFrame, movies: pd.DataFrame):
             .sort_values(["userId", "score"], ascending=[True, False], ignore_index=True))
 
 
+def pick_others(ratings: pd.DataFrame, tags: pd.DataFrame, mine: pd.DataFrame,
+                n: int = 9, draw: int = 10) -> list[dict]:
+    """The student's rule for the other users in the viewer. The pool is the judge's
+    vocabulary minus my own top ten. For each pick: draw `draw` tags from the pool at
+    random, total every user's score over those tags (0 where a user has none), and take
+    the highest-scoring user not already picked. I am never a candidate.
+
+    Same score as score(), computed for every user at once as a sparse product, user by
+    movie ratings times movie by tag dominance, so 5 million ratings need no loop."""
+    from scipy import sparse
+    vocab = [t.strip() for t in (REPO / "judge" / "vocabulary.txt").read_text().splitlines() if t.strip()]
+    pool = sorted(set(vocab) - set(mine["tag"].head(10)))
+    chosen = top_tags(tags)
+    chosen = chosen[chosen["tag"].isin(pool)]
+    others = ratings[ratings["userId"] != ME]
+    users, u = np.unique(others["userId"], return_inverse=True)
+    movies = np.unique(np.concatenate([others["movieId"].to_numpy(), chosen["movieId"].to_numpy()]))
+    col = {t: j for j, t in enumerate(pool)}
+    R = sparse.csr_matrix((others["rating"], (u, np.searchsorted(movies, others["movieId"]))),
+                          shape=(len(users), len(movies)))
+    D = sparse.csr_matrix((chosen["dominance"], (np.searchsorted(movies, chosen["movieId"]),
+                           chosen["tag"].map(col))), shape=(len(movies), len(pool)))
+    S = (R @ D).tocsc()                                  # every user's score on every pool tag
+    rng, taken, picks = np.random.default_rng(SEED), set(), []
+    for _ in range(n):
+        drawn = list(rng.choice(pool, size=draw, replace=False))
+        total = np.asarray(S[:, [col[t] for t in drawn]].sum(axis=1)).ravel()
+        for i in np.argsort(-total, kind="stable"):
+            if users[i] not in taken:
+                break
+        taken.add(users[i])
+        picks.append({"userId": int(users[i]), "total": float(total[i]), "tags": drawn})
+    return picks
+
+
 def part3_users(ratings, tags, movies, links):
     print("== (1) my ratings ==")
     mine, skipped = read_my_ratings()
@@ -143,6 +179,11 @@ def part3_users(ratings, tags, movies, links):
     scored = score(ratings[ratings["userId"].isin(users)], tags, movies)
     print(scored[scored["userId"] == ME].head(10)[["tag", "score"]].to_string(index=False))
     print(f"{len(scored):,} user-tag rows over {scored['userId'].nunique()} user(s)")
+
+    print("== (3) the nine others ==")
+    picks = pick_others(ratings, tags, scored[scored["userId"] == ME])
+    for p in picks:
+        print(f"user {p['userId']}: total {p['total']:.3f} on {', '.join(p['tags'])}")
 
 
 if __name__ == "__main__":
