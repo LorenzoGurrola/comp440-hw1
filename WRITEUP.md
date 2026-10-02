@@ -112,15 +112,15 @@ An order line looks like `296: nonlinear, hit men, dark comedy, ...`, the tags b
 
 **How the judge skill is built: the files it is made of and what each one does (about 150 words):**
 
-XXXX
+SKILL.md just alerts claude that it has a judge skill, and to look at judge/README.md for a more detailed explanation. This README file breaks down each file in the judge/ directory, and how specifically claude is to interact with each one. It also provides in-depth instructions for how Claude is to execute this "judge skill" at a high level. The system.md file is a short prompt, and shown to each copy of claude code with concise instructions on how to give the correct one-line output, and what input to expect. judge.py is the script for grabbing the data, passing it to each of 5 claude judges, and checking for edge cases and process success. criterion.md was my paragraph for part 2 on how the judge should operate, and criterion_users.md will be my paragraph for part 3. The movies.csv and vocabulary.txt are the inputs to the judge.py script, and ratings_movies.csv and ratings_movies.log are the outputs.
 
 **What happens when I run `/judge`, from the first check to the CSV (about 150 words):**
 
-XXXX
+First, the script checks to make sure it can open the file properly. When the file is named users.csv, it checks the criterion_users.md file for my instructions, otherwise it checks criterion.md. (So ensuring proper spelling of users.csv is important). If the file is still the template, the run stops. If the file is movies.csv, it also reads my top 10 movies out of WRITEUP. It then states which criterion it read, and how many items and tag ratings it wants. For each item, it runs an isolated claude session that sees only the criterion, 1 movie, and its tags. It gives back its rating (1 to 5) for each tag. Then the script asks once more about any item that came back with fewer ratings than it asked for. It then writes the id, tag, and rating into ratings_movies.csv, and the entire summary into ratings_movies.log
 
 **Why a skill: what a skill like this gives you that a script or a prompt alone does not, and where you would use one next (about 100 words):**
 
-XXXX
+A skill lets you define a unique set of behaviors that are useful in certain contexts, but not all. I would build a skill for testing my own knowledge of a certain subject. I could give specific instructions on how I want to be quizzed, and how I want feedback for optimal learning.
 
 ### The viewer and the disagreements
 
