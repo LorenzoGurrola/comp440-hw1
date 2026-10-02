@@ -209,7 +209,7 @@ XXXX
 
 **Improvement 1: what I changed in the scoring function, what the judge and the viewer showed before and after (about 150 words):**
 
-XXXX
+I wanted to penalize very common tags that weren't very specific, so I gathered the top 1% of tags and applyed a 50% penalty to their application counts before making the top 25% cut. For both the judge and the viewer, the rankings shifted places slightly, but not as much as I expected
 
 **Improvement 2: the same (about 150 words):**
 
