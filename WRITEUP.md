@@ -213,7 +213,7 @@ XXXX
 
 **Improvement 2: the same (about 150 words):**
 
-XXXX
+I changed the scores (which for me maxxed out at 1, and for others, maxxed out around 50), via min-max scaling, so all scores are from 1-5, making for easier interpretation and comparision. It is interesting to see how far the bottom of the top 10 list is from 1. They are all still quite far above 1
 
 ## Part 4. Working with Claude
 

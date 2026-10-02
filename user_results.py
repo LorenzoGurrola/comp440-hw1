@@ -3,7 +3,8 @@
 Builds one self-contained HTML page with ten people: me (userId 999999) and the nine others
 picked by `pick_others()` in `part3_users.py`. For each person it shows
 
-  * their top 10 tags by my `score(user, tag)`, highest first;
+  * their top 10 tags by my `score(user, tag)`, highest first, min-max scaled to 1-5 per
+    person over every tag that person has a score for;
   * their 3 highest-rated movies. Ties in rating are broken by how many tags that person
     applied to the movie, more first, and a tie in that too is broken at random under SEED.
 
@@ -45,6 +46,9 @@ def build():
     ids = [ME] + [p["userId"] for p in others]
     sub = ratings[ratings["userId"].isin(ids)]
     scored = score(sub, tags, movies)
+    lo = scored.groupby("userId")["score"].transform("min")     # min-max per person, over
+    hi = scored.groupby("userId")["score"].transform("max")     # every tag they have a score for
+    scored["score 1-5"] = (1 + 4 * (scored["score"] - lo) / (hi - lo)).round(2)
     best = top_movies(sub, tags, movies.set_index("movieId")["title"])
     people = []
     for i in ids:
@@ -52,7 +56,7 @@ def build():
             "userId": i,
             "label": "me" if i == ME else f"user {i}",
             "n_ratings": int((sub["userId"] == i).sum()),
-            "tags": scored[scored["userId"] == i].head(10)[["tag", "score"]],
+            "tags": scored[scored["userId"] == i].head(10)[["tag", "score 1-5"]],
             "movies": best[best["userId"] == i][["title", "rating", "my_tags"]],
         })
     return people
@@ -92,7 +96,8 @@ th, td { text-align:left; padding:4px 8px; border-bottom:1px solid var(--line); 
 th { background:var(--head); }
 """
     body = ["<h1>User viewer</h1>",
-            "<p class='meta'>Top 10 tags by my score(user, tag), and each person's 3 highest-rated "
+            "<p class='meta'>Top 10 tags by my score(user, tag), min-max scaled to 1-5 per person "
+            "over every tag that person has a score for; and each person's 3 highest-rated "
             "movies (ties: more tags they applied first, then random).</p>"]
     for p in people:
         movies = p["movies"].rename(columns={"title": "movie", "my_tags": "tags they applied"})
