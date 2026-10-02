@@ -197,15 +197,15 @@ It shows each user's top 10 tags, along with the score. I also showed their top 
 
 **What I put in the description column for a person, and why (about 150 words):**
 
-XXXX
+I put that persons top five movies, each of those movie's title and year, and the vocabulary tags other people applied to that movie in alphabetical order. I figured this would give the agent enough of description to judge tags accurately
 
 **My criterion for people: what it asks the judge to do that the movie criterion did not (about 60 words):**
 
-XXXX
+It ranks tags higher if they are applied to movies that show up in the top 5 list.
 
 **The user-tag pairs I chose to judge, how many, and why those (about 100 words):**
 
-XXXX
+I chose the top 50 tags by popularity for each person, due to budgeting restraints. I chose those based off of which are in the vocabulary.txt file, because the judge only looks at tags in the vocabulary.txt file
 
 **Improvement 1: what I changed in the scoring function, what the judge and the viewer showed before and after (about 150 words):**
 
@@ -213,7 +213,7 @@ I wanted to penalize very common tags that weren't very specific, so I gathered 
 
 **Improvement 2: the same (about 150 words):**
 
-I changed the scores (which for me maxxed out at 1, and for others, maxxed out around 50), via min-max scaling, so all scores are from 1-5, making for easier interpretation and comparision. It is interesting to see how far the bottom of the top 10 list is from 1. They are all still quite far above 1
+For me, the scores maxxed out at 1, and for others, maxxed out around 50. So we min-max scaled them in the viewer to the range 1-5, making for easier interpretation and comparision. It is interesting to see how far the bottom of the top 10 list is from 1. They are all still quite far above 1. This change didn't affect the judge.
 
 ## Part 4. Working with Claude
 
