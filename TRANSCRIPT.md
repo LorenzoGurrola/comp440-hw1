@@ -2811,7 +2811,7 @@ Ready to describe **how the judge skill is built**: the files it's made of and w
 <!-- transcript-session: 4b5371c1-26d0-4055-b866-0e6ef0bc608b | 2026-10-02T14:09:42.631Z -->
 ## Session `4b5371c1` — 2026-10-02 14:09:42
 
-*18 user turns. Tool outputs and reasoning omitted.*
+*26 user turns. Tool outputs and reasoning omitted.*
 
 **User:**
 can we go back a step
@@ -3539,6 +3539,172 @@ score(user, tag) is yours to write
 **3. Transcript.** `4 session(s) found; this session in TRANSCRIPT.md: yes.`
 
 **4. Commit.** Nothing is missing for Part 2. Are you ready for me to commit it as `Part 2 done`?
+
+**User:**
+yes
+
+**Claude:**
+- 🔧 `Bash` — Update the transcript and commit Part 2
+Part 2 is committed as `8d95ff1 Part 2 done`, and nothing is left uncommitted. I updated `TRANSCRIPT.md` again just before the commit.
+
+Part 3 is next.
+
+Should I push it now?
+
+**User:**
+yes
+
+**Claude:**
+- 🔧 `Bash` — Push commits to the remote
+The push went through: `main` on GitHub is now at `8d95ff1`, "Part 2 done."
+
+Part 3 starts with the "My 20 ratings" slot: 20 movies you've seen, each with your rating from 0.5 to 5.0 in half-star steps. You pick the movies and the ratings. Give me titles and I'll look up each movieId.
+
+The slot is read by a script, so I'll write it as bare lines like `296, Pulp Fiction (1994), 4.5`.
+
+Which 20 movies, and what rating for each?
+
+**User:**
+Can I use movies from my top 10 list earlier
+
+**Claude:**
+- 🔧 `Bash` — Find the handout's rules for the 20 ratings
+- 🔧 `Bash` — Read the Part 3 section of the handout
+Yes. The handout's only rule for this step (README.md, Part 3 step 1) is that they're 20 movies you have seen, each with the rating you'd give it. Nothing there rules out your ten from Part 2.
+
+All ten already have movieIds in the "My ten movies" slot, so I won't need to look those up. For any others, give me the titles and I'll find the ids.
+
+Which 20 movies, and what rating for each?
+
+**User:**
+Can you give me some quick context about what part 3 is about, so I can choose my movies accordingly
+
+**Claude:**
+Part 3 asks the same question as Part 2, about people instead of movies: which tags best describe a person's taste?
+
+- **The problem:** most people never tag. So a person's tags have to come from what they rated, meaning how they rated the movies that carry each tag.
+- **Step 1:** your 20 ratings make you a user in the ratings table.
+- **Step 2:** you define `score(user, tag)` and test it on yourself first.
+- **Step 3:** you build tools to check it.
+  - A user viewer, `user_results.py`, that shows the tags for 10 users, you included.
+  - The judge run on people. You write `judge/users.csv`, which describes each person, and `judge/criterion_users.md`.
+  - A side-by-side of your scores and the judge's ratings.
+- **Step 4:** you make two improvements to your score and say what showed each one.
+
+Your 20 ratings are the data your score will describe you from. Which movies you pick is your call.
+
+Which 20, and what rating for each?
+
+**User:**
+Sinners: 4; War of the worlds: 4; Speak no evil 2024: 5; Sumala: 3; weapons: 4.5; what's eating gilbert grape: 5; spirit stallion of the cimarron: 5; the lion king: 5; kpop demon hunters: 3; jerry maguire: 5; the thing: 4.5; the long walk: 5; eyes wide shut: 3; lee cronins the mummy: 2.5; scary movie 2: 1.5; the other guys: 3.5; backrooms: 3.5, the odyssey: 3; brothers: 2.5; scooby-doo: 4.5
+
+**Claude:**
+- 🔧 `Bash` — Look up the 20 titles in the compact movie list
+- 🔧 `Bash` — Find the latest release year in the data
+I looked up all 20 in `data/movies.csv`. Its latest release year is 2022, so newer films can't be in it.
+
+**Found, one match each:**
+```
+337, What's Eating Gilbert Grape (1993), 5
+5389, Spirit: Stallion of the Cimarron (2002), 5
+1393, Jerry Maguire (1996), 5
+2712, Eyes Wide Shut (1999), 3
+4388, Scary Movie 2 (2001), 1.5
+79592, Other Guys, The (2010), 3.5
+5419, Scooby-Doo (2002), 4.5
+```
+
+**Found, two versions each:**
+- War of the Worlds: `2662` (1953) or `34048` (2005)
+- The Lion King: `364` (1994) or `203222` (2019)
+- The Thing: `2288` (1982) or `90345` (2011)
+
+**Not in the data:** Sinners, Speak No Evil (2024), Sumala, Weapons, KPop Demon Hunters, The Long Walk, Lee Cronin's The Mummy, Backrooms, The Odyssey and Brothers. The nearest titles I found were "2001: A Space Odyssey" and films with "Brothers" in the name. None of those is the same movie.
+
+So you'll need 10 more movies, released in 2022 or earlier. First, though: which version of War of the Worlds, The Lion King and The Thing did you mean?
+
+**User:**
+2005, 1994, and 1982. And brothers is from 2009
+
+**Claude:**
+- 🔧 `Bash` — Search for a 2009 film named Brothers
+- 🔧 `Edit` — /Users/lorenzogurrola/Desktop/Files/COMP440/comp440-hw1/WRITEUP.md
+I searched again for Brothers (2009). Nothing in `data/movies.csv` has "brother" in the title with 2009 as the year, so it isn't in the compact set either.
+
+I wrote the ten that matched into the "My 20 ratings" slot, in the order you gave them. It reads:
+
+```
+34048, War of the Worlds (2005), 4
+337, What's Eating Gilbert Grape (1993), 5
+5389, Spirit: Stallion of the Cimarron (2002), 5
+364, Lion King, The (1994), 5
+1393, Jerry Maguire (1996), 5
+2288, Thing, The (1982), 4.5
+2712, Eyes Wide Shut (1999), 3
+4388, Scary Movie 2 (2001), 1.5
+79592, Other Guys, The (2010), 3.5
+5419, Scooby-Doo (2002), 4.5
+```
+
+That's 10 of the 20. Which ten more movies, released in 2022 or earlier, and what rating for each?
+
+**User:**
+it follows: 3.5, lord of war: 4, taxi driver: 4.5, norbit: 3, taken: 4.5, the fugutive: 3, signs: 5, little miss sunshine: 4, hancock: 3.5, donnie darko: 4.5
+
+**Claude:**
+- 🔧 `Bash` — Look up the ten new titles in the movie list
+- 🔧 `Edit` — /Users/lorenzogurrola/Desktop/Files/COMP440/comp440-hw1/WRITEUP.md
+Nine of the ten matched. Norbit isn't in `data/movies.csv`. For "taken" I used Taken (2008), the only title that's exactly "Taken." The other two matches are Taken 2 and Taken 3.
+
+I added the nine to the slot. It now has 19 lines:
+
+```
+34048, War of the Worlds (2005), 4
+337, What's Eating Gilbert Grape (1993), 5
+5389, Spirit: Stallion of the Cimarron (2002), 5
+364, Lion King, The (1994), 5
+1393, Jerry Maguire (1996), 5
+2288, Thing, The (1982), 4.5
+2712, Eyes Wide Shut (1999), 3
+4388, Scary Movie 2 (2001), 1.5
+79592, Other Guys, The (2010), 3.5
+5419, Scooby-Doo (2002), 4.5
+121231, It Follows (2014), 3.5
+36529, Lord of War (2005), 4
+111, Taxi Driver (1976), 4.5
+59369, Taken (2008), 4.5
+457, Fugitive, The (1993), 3
+5502, Signs (2002), 5
+46578, Little Miss Sunshine (2006), 4
+60074, Hancock (2008), 3.5
+4878, Donnie Darko (2001), 4.5
+```
+
+What's your 20th movie, and what rating do you give it?
+
+**User:**
+her 2013: 4.5
+
+**Claude:**
+- 🔧 `Bash` — Look up Her (2013)
+- 🔧 `Edit` — /Users/lorenzogurrola/Desktop/Files/COMP440/comp440-hw1/WRITEUP.md
+- 🔧 `Bash` — Check that the script reads all 20 ratings
+I found Her (2013) as movieId `106920` and added it as the 20th line:
+
+```
+106920, Her (2013), 4.5
+```
+
+`run_all.py` now reads the slot correctly:
+
+```
+20 rating(s) read from the "My 20 ratings" slot in WRITEUP.md.
+5,000,050 ratings with yours in, as userId 999999.
+```
+
+So you're in the ratings table as user `999999`. Next is step 2, your `score(user, tag)`.
+
+The ratings are finished work, so this is a good point to save. Should I commit them and push?
 
 **User:**
 yes
